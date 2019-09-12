@@ -1,0 +1,123 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next -p 7777",
+    "ngrok": "ngrok http 7777 -subdomain shawn-flash-frontend",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/pro-duotone-svg-icons": "^5.10.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "apollo-boost": "^0.4.4",
+    "graphql": "^14.5.4",
+    "graphql-tag": "^2.10.1",
+    "next": "^9.0.5",
+    "next-with-apollo": "^4.3.0",
+    "nprogress": "^0.2.0",
+    "react": "^16.9.0",
+    "react-apollo": "^3.1.0",
+    "react-dom": "^16.9.0",
+    "react-typography": "^0.16.19",
+    "styled-components": "^4.3.2",
+    "typography": "^0.16.19",
+    "typography-theme-sutro": "^0.16.19"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "dotenv": "^8.1.0",
+    "eslint": "^6.3.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "react/display-name": "off"
+    },
+    "parser": "babel-eslint",
+    "globals": {
+      "process": "readonly",
+      "console": "readonly",
+      "Promise": "readonly"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "eslintIgnore": [
+    "next.config.js"
+  ],
+  "babel": {
+    "env": {
+      "development": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "production": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "test": {
+        "presets": [
+          [
+            "next/babel",
+            {
+              "preset-env": {
+                "modules": "commonjs"
+              }
+            }
+          ]
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  }
+}
