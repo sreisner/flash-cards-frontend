@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
+
+import Button from 'react-bootstrap/Button';
 import { CURRENT_USER_QUERY } from './User';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
+import gql from 'graphql-tag';
 
 const SIGNOUT_MUTATION = gql`
   mutation {
@@ -30,9 +32,14 @@ class Signout extends Component {
         ]}
       >
         {(signout, { loading }) => (
-          <button type="button" onClick={() => this.handleSignout(signout)} disabled={loading}>
+          <Button
+            type="button"
+            onClick={() => this.handleSignout(signout)}
+            disabled={loading}
+            variant="link"
+          >
             Sign Out
-          </button>
+          </Button>
         )}
       </Mutation>
     );

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import User, { CURRENT_USER_QUERY } from './User';
 
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
+import Row from 'react-bootstrap/Row';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -15,26 +17,25 @@ const StyledPage = styled.div`
   height: 100vh;
   width: 100%;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .form {
-    width: 100%;
-    max-width: 500px;
-  }
 `;
 
-const LOGIN_MUTATION = gql`
-  mutation LOGIN_MUTATION($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
+const SIGNUP_MUTATION = gql`
+  mutation SIGNUP_MUTATION(
+    $email: String!
+    $password: String!
+    $firstName: String!
+    $lastName: String!
+  ) {
+    signup(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
       id
     }
   }
 `;
 
-class Login extends Component {
+class Signup extends Component {
   state = {
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
   };
@@ -56,24 +57,55 @@ class Login extends Component {
 
           return (
             <Mutation
-              mutation={LOGIN_MUTATION}
+              mutation={SIGNUP_MUTATION}
               variables={this.state}
               refetchQueries={[{ query: CURRENT_USER_QUERY }]}
             >
-              {(login, { error, loading }) => (
+              {(signup, { error, loading }) => (
                 <StyledPage>
-                  <Logo className="logo" />
+                  <Link href="/login">
+                    <Logo />
+                  </Link>
                   <Form
-                    className="form"
                     method="post"
                     onSubmit={async event => {
                       event.preventDefault();
-                      await login();
+                      await signup();
                       Router.push('/');
                     }}
                   >
                     <fieldset disabled={loading} aria-busy={loading}>
+                      <h2>Sign Up</h2>
                       <Error error={error} />
+                      <Row>
+                        <Col lg={true}>
+                          <Form.Group>
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control
+                              type="text"
+                              id="firstName"
+                              name="firstName"
+                              required
+                              value={this.state.firstName}
+                              onChange={this.handleChange}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg={true}>
+                          <Form.Group>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                              type="text"
+                              id="lastName"
+                              name="lastName"
+                              required
+                              value={this.state.lastName}
+                              onChange={this.handleChange}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
                       <Form.Group>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
@@ -99,14 +131,8 @@ class Login extends Component {
                       </Form.Group>
 
                       <Button variant="primary" size="lg" type="submit">
-                        Sign In!
+                        Sign Up!
                       </Button>
-                      <Link href="/signup">
-                        <a>Sign Up</a>
-                      </Link>
-                      <Link href="/forgot-password">
-                        <a>Forgot Password?</a>
-                      </Link>
                     </fieldset>
                   </Form>
                 </StyledPage>
@@ -119,4 +145,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Signup;

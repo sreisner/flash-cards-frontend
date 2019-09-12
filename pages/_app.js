@@ -1,8 +1,8 @@
 import '../lib/fontAwesome';
-
-import App, { Container } from 'next/app';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ApolloProvider } from 'react-apollo';
+import App from 'next/app';
 import AppLoading from '../components/AppLoading';
 import Error from '../components/ErrorMessage';
 import Page from '../components/Page';
@@ -20,7 +20,7 @@ const theme = {
   maroonFlush: '#D62246',
   wineBerry: '#4B1D3F',
   surfieGreen: '#0E7C7B',
-  maxWidth: '1500px',
+  maxWidth: '1000px',
   bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
 };
 
@@ -40,24 +40,22 @@ class MyApp extends App {
     const { Component, apollo, pageProps } = this.props;
 
     return (
-      <Container>
-        <ApolloProvider client={apollo}>
-          <ThemeProvider theme={theme}>
-            <User>
-              {({ loading, error }) => {
-                if (loading) return <AppLoading />;
-                if (error) return <Error error={error} />;
+      <ApolloProvider client={apollo}>
+        <ThemeProvider theme={theme}>
+          <User>
+            {({ loading, error }) => {
+              if (loading) return <AppLoading />;
+              if (error) return <Error error={error} />;
 
-                return (
-                  <Page>
-                    <Component {...pageProps} />
-                  </Page>
-                );
-              }}
-            </User>
-          </ThemeProvider>
-        </ApolloProvider>
-      </Container>
+              return (
+                <Page>
+                  <Component {...pageProps} />
+                </Page>
+              );
+            }}
+          </User>
+        </ThemeProvider>
+      </ApolloProvider>
     );
   }
 }

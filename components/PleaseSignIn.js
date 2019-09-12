@@ -1,18 +1,18 @@
+import AppLoading from './AppLoading';
 import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage';
+import Login from './Login';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import React from 'react';
-import Router from 'next/router';
 
 const PleaseSignIn = ({ children }) => (
   <Query query={CURRENT_USER_QUERY}>
     {({ data, loading, error }) => {
-      if (loading) return <p>Loading...</p>;
+      if (loading) return <AppLoading />;
       if (error) return <Error error={error} />;
       if (!data.me) {
-        Router.push('/login');
-        return null;
+        return <Login />;
       }
 
       return children;

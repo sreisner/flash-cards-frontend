@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Error from './ErrorMessage';
-import NavStyles from './styles/NavStyles';
 import Signout from './Signout';
 import User from './User';
 
@@ -13,10 +12,10 @@ class Nav extends Component {
   render() {
     return (
       <User>
-        {({ data: { me }, loading, error }) => {
+        {({ loading, error }) => {
           if (loading) return null;
           if (error) return <Error error={error} />;
-          return <NavStyles>{!me && <Signout />}</NavStyles>;
+          return <Signout />;
         }}
       </User>
     );
