@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import User, { CURRENT_USER_QUERY } from './User';
 
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
+import Row from 'react-bootstrap/Row';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -22,6 +24,12 @@ const StyledPage = styled.div`
   .form {
     width: 100%;
     max-width: 500px;
+
+    .secondary-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 `;
 
@@ -98,15 +106,27 @@ class Login extends Component {
                         />
                       </Form.Group>
 
-                      <Button variant="primary" size="lg" type="submit">
-                        Sign In!
-                      </Button>
-                      <Link href="/signup">
-                        <a>Sign Up</a>
-                      </Link>
-                      <Link href="/forgot-password">
-                        <a>Forgot Password?</a>
-                      </Link>
+                      <Row>
+                        <Col lg={true}>
+                          <Button variant="primary" size="lg" type="submit">
+                            Sign In!
+                          </Button>
+                        </Col>
+                        <Col lg={true}>
+                          <Row className="secondary-links">
+                            <Col lg={true}>
+                              <Link href="/signup">
+                                <a>Sign Up</a>
+                              </Link>
+                            </Col>
+                            <Col lg={true}>
+                              <Link href="/forgot-password">
+                                <a>Forgot Password?</a>
+                              </Link>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
                     </fieldset>
                   </Form>
                 </StyledPage>
