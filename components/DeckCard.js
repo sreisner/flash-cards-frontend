@@ -8,10 +8,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
-  .right-align {
+  &:hover .delete-deck-button {
+    opacity: 1;
+  }
+
+  .delete-deck-button {
     position: relative;
     left: 100%;
     transform: translateX(-100%);
+    opacity: 0;
+    transition: 0.3s all;
   }
 `;
 
@@ -26,7 +32,7 @@ class DeckCard extends Component {
             <Card.Body>
               <Card.Title>{deck.name}</Card.Title>
               <Card.Text>{deck.cards.length} cards</Card.Text>
-              <DeleteDeckButton id={deck.id} className="right-align" />
+              <DeleteDeckButton id={deck.id} className="delete-deck-button" />
             </Card.Body>
           </NoStyleAnchor>
         </Link>
