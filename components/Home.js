@@ -1,5 +1,6 @@
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import DeckCard from './DeckCard';
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import User from './User';
@@ -13,8 +14,7 @@ const Home = () => {
             <Row>
               {me.decks.map(deck => (
                 <Col lg={3} key={deck.id}>
-                  <h1>{deck.name}</h1>
-                  {/* <DeckCard deck={deck} /> */}
+                  <DeckCard deck={deck} />
                 </Col>
               ))}
             </Row>

@@ -88,7 +88,7 @@ class CreateDeckDialog extends Component {
                   <Button variant="secondary" onClick={toggleCreateDeckDialog}>
                     Close
                   </Button>
-                  <Button variant="primary" type="submit">
+                  <Button variant="primary" type="submit" disabled={loading}>
                     Save Changes
                   </Button>
                 </Modal.Footer>
