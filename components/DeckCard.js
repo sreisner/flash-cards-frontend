@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
 
-import Button from 'react-bootstrap/Button';
-import { CURRENT_USER_QUERY } from './User';
 import Card from 'react-bootstrap/Card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mutation } from 'react-apollo';
+import DeleteDeckButton from './DeleteDeckButton';
+import Link from 'next/link';
+import NoStyleAnchor from './styles/NoStyleAnchor';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
 
-const DeleteButton = styled(Button)`
-  position: relative;
-  left: 100%;
-  transform: translateX(-100%);
-`;
-
-const DELETE_DECK_MUTATION = gql`
-  mutation DELETE_DECK_MUTATION($id: ID!) {
-    deleteDeck(id: $id) {
-      message
-    }
+const StyledCard = styled(Card)`
+  .right-align {
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
   }
 `;
 
@@ -28,27 +20,17 @@ class DeckCard extends Component {
     const { deck } = this.props;
 
     return (
-      <Mutation
-        mutation={DELETE_DECK_MUTATION}
-        variables={{ id: deck.id }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-        awaitRefetchQueries
-      >
-        {(deleteDeck, { error, loading }) => (
-          <Card>
+      <StyledCard>
+        <Link href={`/deck/${deck.id}`}>
+          <NoStyleAnchor>
             <Card.Body>
               <Card.Title>{deck.name}</Card.Title>
               <Card.Text>{deck.cards.length} cards</Card.Text>
-              {error && (
-                <Card.Text>⚠️ There was an problem deleting this deck. Sorry about that!</Card.Text>
-              )}
-              <DeleteButton variant="outline-danger" onClick={deleteDeck} disabled={loading}>
-                <FontAwesomeIcon icon={['fad', 'trash']} />
-              </DeleteButton>
+              <DeleteDeckButton id={deck.id} className="right-align" />
             </Card.Body>
-          </Card>
-        )}
-      </Mutation>
+          </NoStyleAnchor>
+        </Link>
+      </StyledCard>
     );
   }
 }

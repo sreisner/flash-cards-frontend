@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from './Header';
 import Meta from './Meta';
+import Notification from './Notification';
 import PropTypes from 'prop-types';
 import User from './User';
 import styled from 'styled-components';
@@ -25,6 +26,7 @@ class Page extends Component {
         {({ data: { me } }) => (
           <StyledPage>
             <Meta />
+            <Notification />
             {me && <Header />}
             <Inner>{this.props.children}</Inner>
           </StyledPage>
