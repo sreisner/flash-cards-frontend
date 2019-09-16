@@ -27,7 +27,7 @@ class DeckCard extends Component {
 
     return (
       <StyledCard>
-        <Link href={`/deck/${deck.id}`}>
+        <Link href={`/deck?id=${deck.id}`}>
           <NoStyleAnchor>
             <Card.Body>
               <Card.Title>{deck.name}</Card.Title>

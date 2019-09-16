@@ -7,35 +7,35 @@ import React from 'react';
 import { SHOW_NOTIFICATION_MUTATION } from '../lib/withData';
 import gql from 'graphql-tag';
 
-const DELETE_DECK_MUTATION = gql`
-  mutation DELETE_DECK_MUTATION($id: ID!) {
-    deleteDeck(id: $id) {
+const DELETE_CARD_MUTATION = gql`
+  mutation DELETE_CARD_MUTATION($id: ID!) {
+    deleteCard(id: $id) {
       message
     }
   }
 `;
 
-const DeleteDeckButton = ({ id, className }) => (
+const DeleteCardButton = ({ id, className }) => (
   <Mutation mutation={SHOW_NOTIFICATION_MUTATION}>
     {showNotification => (
       <Mutation
-        mutation={DELETE_DECK_MUTATION}
+        mutation={DELETE_CARD_MUTATION}
         variables={{ id }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         awaitRefetchQueries
       >
-        {(deleteDeck, { loading }) => (
+        {(deleteCard, { loading }) => (
           <Button
             variant="outline-danger"
             onClick={async event => {
               event.stopPropagation();
               try {
-                await deleteDeck();
+                await deleteCard();
               } catch (error) {
                 showNotification({
                   variables: {
                     headerText: `We goofed something up.`,
-                    bodyText: `We couldn't delete the deck.`,
+                    bodyText: `We couldn't delete the card.`,
                   },
                 });
               }
@@ -51,9 +51,9 @@ const DeleteDeckButton = ({ id, className }) => (
   </Mutation>
 );
 
-DeleteDeckButton.propTypes = {
+DeleteCardButton.propTypes = {
   id: PropTypes.string.isRequired,
   className: PropTypes.string,
 };
 
-export default DeleteDeckButton;
+export default DeleteCardButton;
