@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
 import Card from 'react-bootstrap/Card';
+import DeleteCardButton from './DeleteCardButton';
 import PropTypes from 'prop-types';
+import UpdateCardButton from './UpdateCardButton';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
@@ -28,6 +30,10 @@ class FlashCard extends Component {
           <Card.Subtitle>{card.front}</Card.Subtitle>
           <hr />
           <Card.Text>{card.back}</Card.Text>
+          <div className="actions">
+            <UpdateCardButton className="mr-2" id={card.id} />
+            <DeleteCardButton id={card.id} className="delete-deck-button" />
+          </div>
         </Card.Body>
       </StyledCard>
     );

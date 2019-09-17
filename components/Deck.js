@@ -5,11 +5,14 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import CreateCardButton from './CreateCardButton';
 import FlashCard from './FlashCard';
+import { LOCAL_STATE_QUERY } from '../lib/withData';
 import Link from 'next/link';
 import Masonry from 'react-masonry-component';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
+import { Query } from 'react-apollo';
 import Row from 'react-bootstrap/Row';
+import UpdateCardDialog from './UpdateCardDialog';
 import styled from 'styled-components';
 
 const Actions = styled.div`
@@ -22,34 +25,43 @@ class Deck extends Component {
     const { deck } = this.props;
 
     return (
-      <Container>
-        <Row className="align-items-center mb-4">
-          <Col>
-            <h1>
-              {deck.name}{' '}
-              <small>
-                (<Pluralize singular="card" count={deck.cards.length} />)
-              </small>
-            </h1>
-          </Col>
-          <Col>
-            <Actions>
-              <CreateCardButton className="mr-2" deckId={deck.id} />
-              <Link href={`/study?id=${deck.id}`}>
-                <Button variant="success">Study</Button>
-              </Link>
-            </Actions>
-          </Col>
-        </Row>
-
-        <Masonry>
-          {deck.cards.map(card => (
-            <Col lg={4} key={card.id}>
-              <FlashCard className="mb-4" card={card} />
+      <>
+        <Query query={LOCAL_STATE_QUERY}>
+          {({
+            data: {
+              updateCardDialog: { id, isOpen },
+            },
+          }) => <UpdateCardDialog id={id} isOpen={isOpen} />}
+        </Query>
+        <Container>
+          <Row className="align-items-center mb-4">
+            <Col>
+              <h1>
+                {deck.name}{' '}
+                <small>
+                  (<Pluralize singular="card" count={deck.cards.length} />)
+                </small>
+              </h1>
             </Col>
-          ))}
-        </Masonry>
-      </Container>
+            <Col>
+              <Actions>
+                <CreateCardButton className="mr-2" deckId={deck.id} />
+                <Link href={`/study?id=${deck.id}`}>
+                  <Button variant="success">Study</Button>
+                </Link>
+              </Actions>
+            </Col>
+          </Row>
+
+          <Masonry>
+            {deck.cards.map(card => (
+              <Col lg={4} key={card.id}>
+                <FlashCard className="mb-4" card={card} />
+              </Col>
+            ))}
+          </Masonry>
+        </Container>
+      </>
     );
   }
 }
