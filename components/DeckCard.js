@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
+  padding: 0;
+
   &:hover .delete-deck-button {
     opacity: 1;
   }

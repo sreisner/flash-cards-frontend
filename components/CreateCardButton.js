@@ -10,7 +10,7 @@ const CreateCardButton = ({ deckId, className }) => (
     <Mutation mutation={OPEN_CREATE_CARD_DIALOG_MUTATION}>
       {openCreateCardDialog => (
         <Button
-          variant="light"
+          variant="primary"
           className={className}
           onClick={() => openCreateCardDialog({ variables: { deckId } })}
         >

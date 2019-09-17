@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import CreateCardButton from './CreateCardButton';
 import FlashCard from './FlashCard';
 import Link from 'next/link';
+import Masonry from 'react-masonry-component';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
@@ -41,13 +42,13 @@ class Deck extends Component {
           </Col>
         </Row>
 
-        <Row>
+        <Masonry>
           {deck.cards.map(card => (
             <Col lg={4} key={card.id}>
               <FlashCard className="mb-4" card={card} />
             </Col>
           ))}
-        </Row>
+        </Masonry>
       </Container>
     );
   }

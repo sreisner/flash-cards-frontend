@@ -33,6 +33,7 @@
     "react-apollo": "^3.1.0",
     "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.9.0",
+    "react-masonry-component": "^6.2.1",
     "react-pluralize": "^1.6.3",
     "styled-components": "^4.3.2",
     "typography-theme-sutro": "^0.16.19"

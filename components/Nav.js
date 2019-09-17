@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import CreateDeckButton from './CreateDeckButton';
 import Error from './ErrorMessage';
 import Signout from './Signout';
 import User from './User';
@@ -18,7 +17,6 @@ class Nav extends Component {
           if (error) return <Error error={error} />;
           return (
             <div>
-              <CreateDeckButton />
               <Signout />
             </div>
           );
