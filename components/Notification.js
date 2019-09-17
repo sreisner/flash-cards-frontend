@@ -8,24 +8,25 @@ const Notification = () => (
   <Mutation mutation={HIDE_NOTIFICATION_MUTATION}>
     {hideNotification => (
       <Query query={LOCAL_STATE_QUERY}>
-        {({
-          data: {
-            notification: { isVisible, headerText, bodyText },
-          },
-        }) => (
-          <Toast
-            onClose={hideNotification}
-            show={isVisible}
-            delay={5000}
-            autohide
-            style={{ position: 'fixed', bottom: 20, right: 20 }}
-          >
-            <Toast.Header>
-              <strong className="mr-auto">{headerText}</strong>
-            </Toast.Header>
-            <Toast.Body>{bodyText}</Toast.Body>
-          </Toast>
-        )}
+        {({ data }) => {
+          const { notification } = data || {};
+          const { isVisible, headerText, bodyText } = notification || {};
+
+          return (
+            <Toast
+              onClose={hideNotification}
+              show={isVisible}
+              delay={5000}
+              autohide
+              style={{ position: 'fixed', bottom: 20, right: 20 }}
+            >
+              <Toast.Header>
+                <strong className="mr-auto">{headerText}</strong>
+              </Toast.Header>
+              <Toast.Body>{bodyText}</Toast.Body>
+            </Toast>
+          );
+        }}
       </Query>
     )}
   </Mutation>
