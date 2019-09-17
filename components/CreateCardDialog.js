@@ -1,4 +1,4 @@
-import { LOCAL_STATE_QUERY, TOGGLE_CREATE_DECK_DIALOG_MUTATION } from '../lib/withData';
+import { CLOSE_CREATE_CARD_DIALOG_MUTATION, LOCAL_STATE_QUERY } from '../lib/withData';
 import { Mutation, Query } from 'react-apollo';
 import React, { Component } from 'react';
 
@@ -10,9 +10,9 @@ import Modal from 'react-bootstrap/Modal';
 import { adopt } from 'react-adopt';
 import gql from 'graphql-tag';
 
-const CREATE_DECK_MUTATION = gql`
-  mutation CREATE_DECK_MUTATION($name: String!) {
-    createDeck(name: $name) {
+const CREATE_CARD_MUTATION = gql`
+  mutation CREATE_CARD_MUTATION($front: String!, $back: String!, $deckId: ID!) {
+    createCard(front: $front, back: $back, deckId: $deckId) {
       id
     }
   }
@@ -20,21 +20,22 @@ const CREATE_DECK_MUTATION = gql`
 
 /* eslint-disable react/prop-types */
 const Composed = adopt({
-  createDeckComposed: ({ render }) => (
-    <Mutation mutation={CREATE_DECK_MUTATION} refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
-      {(createDeck, { error, loading }) => render({ createDeck, error, loading })}
+  createCardComposed: ({ render }) => (
+    <Mutation mutation={CREATE_CARD_MUTATION} refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
+      {(createCard, { error, loading }) => render({ createCard, error, loading })}
     </Mutation>
   ),
-  toggleCreateDeckDialog: ({ render }) => (
-    <Mutation mutation={TOGGLE_CREATE_DECK_DIALOG_MUTATION}>{render}</Mutation>
+  closeCreateCardDialog: ({ render }) => (
+    <Mutation mutation={CLOSE_CREATE_CARD_DIALOG_MUTATION}>{render}</Mutation>
   ),
   localState: ({ render }) => <Query query={LOCAL_STATE_QUERY}>{render}</Query>,
 });
 /* eslint-enable react/prop-types */
 
-class CreateDeckDialog extends Component {
+class CreateCardDialog extends Component {
   state = {
-    name: '',
+    front: '',
+    back: '',
   };
 
   handleChange = event => {
@@ -44,53 +45,65 @@ class CreateDeckDialog extends Component {
   };
 
   render() {
-    const { name } = this.state;
+    const { front, back } = this.state;
 
     return (
       <Composed>
         {({
-          createDeckComposed: { createDeck, loading, error },
-          toggleCreateDeckDialog,
+          createCardComposed: { createCard, loading, error },
+          closeCreateCardDialog,
           localState,
         }) => {
-          const isCreateDeckDialogOpen = localState.data && localState.data.isCreateDeckDialogOpen;
+          const { isOpen, deckId } = (localState.data && localState.data.createCardDialog) || {};
 
           return (
-            <Modal show={isCreateDeckDialogOpen} onHide={toggleCreateDeckDialog}>
+            <Modal show={isOpen} onHide={closeCreateCardDialog}>
               <Form
                 method="post"
                 onSubmit={async event => {
                   event.preventDefault();
-                  await createDeck({ variables: { name } });
+                  await createCard({ variables: { front, back, deckId } });
                   this.setState(
                     {
-                      name: '',
+                      front: '',
+                      back: '',
                     },
-                    toggleCreateDeckDialog
+                    closeCreateCardDialog
                   );
                 }}
               >
                 <Modal.Header closeButton>
-                  <Modal.Title>Create a Deck</Modal.Title>
+                  <Modal.Title>Create a Card</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <fieldset disabled={loading} aria-busy={loading}>
                     <Error error={error} />
                     <Form.Group>
-                      <Form.Label>Name</Form.Label>
+                      <Form.Label>Front</Form.Label>
                       <Form.Control
-                        type="text"
-                        id="name"
-                        name="name"
+                        type="textarea"
+                        id="front"
+                        name="front"
                         required
-                        value={name}
+                        value={front}
+                        onChange={this.handleChange}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Back</Form.Label>
+                      <Form.Control
+                        type="textarea"
+                        id="back"
+                        name="back"
+                        required
+                        value={back}
                         onChange={this.handleChange}
                       />
                     </Form.Group>
                   </fieldset>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={toggleCreateDeckDialog}>
+                  <Button variant="secondary" onClick={closeCreateCardDialog}>
                     Close
                   </Button>
                   <Button variant="primary" type="submit" disabled={loading}>
@@ -106,4 +119,4 @@ class CreateDeckDialog extends Component {
   }
 }
 
-export default CreateDeckDialog;
+export default CreateCardDialog;

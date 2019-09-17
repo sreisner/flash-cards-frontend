@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import CreateCardButton from './CreateCardButton';
 import FlashCard from './FlashCard';
 import Link from 'next/link';
 import Pluralize from 'react-pluralize';
@@ -27,6 +28,7 @@ class Deck extends Component {
 
           <Col className="justify-self-end">
             <Row className="justify-content-end">
+              <CreateCardButton className="mr-2" deckId={deck.id} />
               <Link href={`/study?id=${deck.id}`}>
                 <Button variant="success">Study</Button>
               </Link>
