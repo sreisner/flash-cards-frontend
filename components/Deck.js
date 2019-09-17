@@ -25,7 +25,6 @@ class Deck extends Component {
               </small>
             </h1>
           </Col>
-
           <Col className="justify-self-end">
             <Row className="justify-content-end">
               <CreateCardButton className="mr-2" deckId={deck.id} />
@@ -35,6 +34,7 @@ class Deck extends Component {
             </Row>
           </Col>
         </Row>
+
         <Row>
           {deck.cards.map(card => (
             <Col lg={4} key={card.id}>

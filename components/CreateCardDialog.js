@@ -81,7 +81,8 @@ class CreateCardDialog extends Component {
                     <Form.Group>
                       <Form.Label>Front</Form.Label>
                       <Form.Control
-                        type="textarea"
+                        as="textarea"
+                        rows={3}
                         id="front"
                         name="front"
                         required
@@ -92,7 +93,8 @@ class CreateCardDialog extends Component {
                     <Form.Group>
                       <Form.Label>Back</Form.Label>
                       <Form.Control
-                        type="textarea"
+                        as="textarea"
+                        rows={3}
                         id="back"
                         name="back"
                         required
