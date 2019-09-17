@@ -6,19 +6,19 @@ import Link from 'next/link';
 import NoStyleAnchor from './styles/NoStyleAnchor';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
+import UpdateDeckButton from './UpdateDeckButton';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
   padding: 0;
 
-  &:hover .delete-deck-button {
+  &:hover .actions {
     opacity: 1;
   }
 
-  .delete-deck-button {
-    position: relative;
-    left: 100%;
-    transform: translateX(-100%);
+  .actions {
+    display: flex;
+    justify-content: flex-end;
     opacity: 0;
     transition: 0.3s all;
   }
@@ -37,7 +37,10 @@ class DeckCard extends Component {
               <Card.Text>
                 <Pluralize singular="card" count={deck.cards.length}></Pluralize>
               </Card.Text>
-              <DeleteDeckButton id={deck.id} className="delete-deck-button" />
+              <div className="actions">
+                <UpdateDeckButton className="mr-2" id={deck.id} />
+                <DeleteDeckButton id={deck.id} className="delete-deck-button" />
+              </div>
             </Card.Body>
           </NoStyleAnchor>
         </Link>
