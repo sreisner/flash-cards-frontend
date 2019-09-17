@@ -9,6 +9,12 @@ import Link from 'next/link';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
+import styled from 'styled-components';
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 class Deck extends Component {
   render() {
@@ -25,13 +31,13 @@ class Deck extends Component {
               </small>
             </h1>
           </Col>
-          <Col className="justify-self-end">
-            <Row className="justify-content-end">
+          <Col>
+            <Actions>
               <CreateCardButton className="mr-2" deckId={deck.id} />
               <Link href={`/study?id=${deck.id}`}>
                 <Button variant="success">Study</Button>
               </Link>
-            </Row>
+            </Actions>
           </Col>
         </Row>
 
