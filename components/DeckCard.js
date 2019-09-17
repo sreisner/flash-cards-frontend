@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import DeleteDeckButton from './DeleteDeckButton';
 import Link from 'next/link';
 import NoStyleAnchor from './styles/NoStyleAnchor';
+import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -31,7 +32,9 @@ class DeckCard extends Component {
           <NoStyleAnchor>
             <Card.Body>
               <Card.Title>{deck.name}</Card.Title>
-              <Card.Text>{deck.cards.length} cards</Card.Text>
+              <Card.Text>
+                <Pluralize singular="card" count={deck.cards.length}></Pluralize>
+              </Card.Text>
               <DeleteDeckButton id={deck.id} className="delete-deck-button" />
             </Card.Body>
           </NoStyleAnchor>

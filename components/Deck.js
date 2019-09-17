@@ -28,7 +28,7 @@ class Deck extends Component {
           <Col className="justify-self-end">
             <Row className="justify-content-end">
               <Link href={`/study?id=${deck.id}`}>
-                <Button variant="primary">Study</Button>
+                <Button variant="success">Study</Button>
               </Link>
             </Row>
           </Col>
@@ -36,7 +36,7 @@ class Deck extends Component {
         <Row>
           {deck.cards.map(card => (
             <Col lg={4} key={card.id}>
-              <FlashCard card={card} />
+              <FlashCard className="mb-4" card={card} />
             </Col>
           ))}
         </Row>
