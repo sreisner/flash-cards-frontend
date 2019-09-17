@@ -1,5 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import CreateCardDialog from './CreateCardDialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mutation } from 'react-apollo';
 import { OPEN_CREATE_CARD_DIALOG_MUTATION } from '../lib/withData';
 import PropTypes from 'prop-types';
@@ -14,7 +15,7 @@ const CreateCardButton = ({ deckId, className }) => (
           className={className}
           onClick={() => openCreateCardDialog({ variables: { deckId } })}
         >
-          ➕ Add a Card
+          <FontAwesomeIcon icon="plus" /> Add a Card
         </Button>
       )}
     </Mutation>
