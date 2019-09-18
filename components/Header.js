@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Logo from './Logo';
 import NProgress from 'nprogress';
 import Nav from './Nav';
+import PropTypes from 'prop-types';
 import Router from 'next/router';
 import styled from 'styled-components';
 
@@ -20,11 +21,15 @@ Router.onRouteChangeError = () => {
 };
 
 const StyledHeader = styled.header`
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0 20px;
+  background: white;
+  z-index: 1;
+  border-bottom: 1px solid lightgrey;
 
   .logo {
     width: 100px;
@@ -33,8 +38,10 @@ const StyledHeader = styled.header`
 
 class Header extends PureComponent {
   render() {
+    const { innerRef } = this.props;
+
     return (
-      <StyledHeader>
+      <StyledHeader ref={innerRef}>
         <Link href="/">
           <a>
             <Logo className="logo" />
@@ -47,5 +54,9 @@ class Header extends PureComponent {
     );
   }
 }
+
+Header.propTypes = {
+  innerRef: PropTypes.any.isRequired,
+};
 
 export default React.forwardRef((props, ref) => <Header innerRef={ref} {...props} />);

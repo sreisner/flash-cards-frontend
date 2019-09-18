@@ -14,12 +14,35 @@ const StyledPage = styled.div`
 
 const Inner = styled.div`
   position: relative;
+  top: ${props => (props.headerHeight ? props.headerHeight + 20 : 0)}px;
   max-width: ${props => props.theme.maxWidth};
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
 `;
 
 class Page extends Component {
+  header = React.createRef();
+  state = {
+    headerHeight: 0,
+  };
+
+  componentDidMount() {
+    this.shiftContentBelowHeader();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.children !== this.props.children) {
+      this.shiftContentBelowHeader();
+    }
+  }
+
+  shiftContentBelowHeader = () => {
+    this.setState({
+      headerHeight: this.header.current ? this.header.current.clientHeight : undefined,
+    });
+  };
+
   render() {
     return (
       <User>
@@ -27,8 +50,8 @@ class Page extends Component {
           <StyledPage>
             <Meta />
             <Notification />
-            {me && <Header />}
-            <Inner>{this.props.children}</Inner>
+            {me && <Header ref={this.header} />}
+            <Inner headerHeight={this.state.headerHeight}>{this.props.children}</Inner>
           </StyledPage>
         )}
       </User>
