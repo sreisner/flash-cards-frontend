@@ -13,12 +13,19 @@ const StyledPage = styled.div`
 `;
 
 const Inner = styled.div`
+  ${props => {
+    const top = props.headerHeight ? props.headerHeight + 20 : 0;
+
+    return `
+      top: ${top}px;
+      min-height: calc(100vh - ${top}px);
+    `;
+  }}
+
   position: relative;
-  top: ${props => (props.headerHeight ? props.headerHeight + 20 : 0)}px;
   max-width: ${props => props.theme.maxWidth};
   margin: 0 auto;
   padding: 2rem;
-  min-height: 100vh;
 `;
 
 class Page extends Component {
