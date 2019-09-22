@@ -33,7 +33,7 @@ class Deck extends Component {
             },
           }) => <UpdateCardDialog id={id} isOpen={isOpen} />}
         </Query>
-        <Container>
+        <Container className="pt-4">
           <Row className="align-items-center mb-4">
             <Col>
               <h1>

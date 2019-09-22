@@ -30,7 +30,7 @@ const Home = () => {
       <User>
         {({ data: { me } }) => {
           return (
-            <Container>
+            <Container className="pt-4">
               <Row className="align-items-center mb-4">
                 <Col>
                   <h1>

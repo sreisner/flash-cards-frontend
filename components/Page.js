@@ -10,22 +10,22 @@ import styled from 'styled-components';
 const StyledPage = styled.div`
   background: white;
   color: ${props => props.theme.black};
+  perspective: 3000px;
 `;
 
 const Inner = styled.div`
   ${props => {
-    const top = props.headerHeight ? props.headerHeight + 20 : 0;
+    const top = props.headerHeight ? props.headerHeight : 0;
 
     return `
       top: ${top}px;
-      min-height: calc(100vh - ${top}px);
+      height: calc(100vh - ${top}px);
     `;
   }}
 
   position: relative;
   max-width: ${props => props.theme.maxWidth};
   margin: 0 auto;
-  padding: 2rem;
 `;
 
 class Page extends Component {

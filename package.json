@@ -23,11 +23,13 @@
     "apollo-boost": "^0.4.4",
     "apollo-client": "^2.6.4",
     "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
     "graphql": "^14.5.4",
     "graphql-tag": "^2.10.1",
     "next": "^9.0.5",
     "next-with-apollo": "^4.3.0",
     "nprogress": "^0.2.0",
+    "pure-react-carousel": "^1.22.0",
     "react": "^16.9.0",
     "react-adopt": "^0.6.0",
     "react-apollo": "^3.1.0",
@@ -35,6 +37,7 @@
     "react-dom": "^16.9.0",
     "react-masonry-component": "^6.2.1",
     "react-pluralize": "^1.6.3",
+    "react-swipeable": "^5.4.0",
     "styled-components": "^4.3.2",
     "typography-theme-sutro": "^0.16.19"
   },
@@ -60,7 +63,9 @@
     "globals": {
       "process": "readonly",
       "console": "readonly",
-      "Promise": "readonly"
+      "Promise": "readonly",
+      "document": "readonly",
+      "setTimeout": "readonly"
     },
     "settings": {
       "react": {
