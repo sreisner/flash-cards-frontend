@@ -10,7 +10,6 @@ import styled from 'styled-components';
 const StyledPage = styled.div`
   background: white;
   color: ${props => props.theme.black};
-  perspective: 3000px;
 `;
 
 const Inner = styled.div`
