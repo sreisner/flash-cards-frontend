@@ -29,7 +29,6 @@
     "next": "^9.0.5",
     "next-with-apollo": "^4.3.0",
     "nprogress": "^0.2.0",
-    "pure-react-carousel": "^1.22.0",
     "react": "^16.9.0",
     "react-adopt": "^0.6.0",
     "react-apollo": "^3.1.0",
@@ -38,8 +37,7 @@
     "react-masonry-component": "^6.2.1",
     "react-pluralize": "^1.6.3",
     "react-swipeable": "^5.4.0",
-    "styled-components": "^4.3.2",
-    "typography-theme-sutro": "^0.16.19"
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -65,6 +63,8 @@
       "console": "readonly",
       "Promise": "readonly",
       "document": "readonly",
+      "window": "readonly",
+      "setInterval": "readonly",
       "setTimeout": "readonly"
     },
     "settings": {
