@@ -10,7 +10,8 @@ const UP_KEY = 38;
 const DOWN_KEY = 40;
 
 const SceneContainer = styled.div`
-  width: 100%;
+  margin: 0 auto;
+  width: 95%;
   height: 100%;
   overflow-y: hidden;
 `;
