@@ -5,9 +5,9 @@ import StudyCard from './StudyCard';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
-// const SPACE_KEY = 32;
-// const UP_KEY = 38;
-// const DOWN_KEY = 40;
+const SPACE_KEY = 32;
+const UP_KEY = 38;
+const DOWN_KEY = 40;
 
 const SceneContainer = styled.div`
   width: 100%;
@@ -52,10 +52,34 @@ class Study extends Component {
     this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
   };
 
+  prevCard = () => {
+    if (this.state.activeCardIndex > 0) {
+      this.setState(({ activeCardIndex }) => ({ activeCardIndex: activeCardIndex - 1 }));
+    }
+  };
+
+  nextCard = () => {
+    if (this.state.activeCardIndex < this.props.deck.cards.length - 1) {
+      this.setState(({ activeCardIndex }) => ({ activeCardIndex: activeCardIndex + 1 }));
+    }
+  };
+
   componentDidMount() {
     this.cardRefs = this.props.deck.cards.map(() => React.createRef());
 
-    setTimeout(() => this.setState({ activeCardIndex: 2 }), 1000);
+    document.addEventListener('keydown', event => {
+      switch (event.keyCode) {
+        case DOWN_KEY:
+          this.nextCard();
+          break;
+        case UP_KEY:
+          this.prevCard();
+          break;
+        case SPACE_KEY:
+          this.flipActiveCard();
+          break;
+      }
+    });
   }
 
   componentDidUpdate(_, prevState) {
