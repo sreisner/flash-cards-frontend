@@ -49,7 +49,6 @@ class Study extends Component {
   cardRefs = [];
 
   flipActiveCard = () => {
-    console.log('flipping');
     this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
   };
 
