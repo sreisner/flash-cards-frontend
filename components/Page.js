@@ -34,7 +34,9 @@ class Page extends Component {
   };
 
   componentDidMount() {
-    this.shiftContentBelowHeader();
+    // A hack to shift the content of the page below the fixed header
+    // after everything's rendered properly
+    setTimeout(() => this.shiftContentBelowHeader(), 0);
   }
 
   componentDidUpdate(prevProps) {
