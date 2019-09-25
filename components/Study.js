@@ -54,13 +54,19 @@ class Study extends Component {
 
   prevCard = () => {
     if (this.state.activeCardIndex > 0) {
-      this.setState(({ activeCardIndex }) => ({ activeCardIndex: activeCardIndex - 1 }));
+      this.setState(({ activeCardIndex }) => ({
+        activeCardIndex: activeCardIndex - 1,
+        activeCardFlipped: false,
+      }));
     }
   };
 
   nextCard = () => {
     if (this.state.activeCardIndex < this.props.deck.cards.length - 1) {
-      this.setState(({ activeCardIndex }) => ({ activeCardIndex: activeCardIndex + 1 }));
+      this.setState(({ activeCardIndex }) => ({
+        activeCardIndex: activeCardIndex + 1,
+        activeCardFlipped: false,
+      }));
     }
   };
 
