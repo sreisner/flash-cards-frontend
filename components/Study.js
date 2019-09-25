@@ -1,146 +1,96 @@
 import React, { Component } from 'react';
 
-import { CSSTransition } from 'react-transition-group';
 import PropTypes from 'prop-types';
 import StudyCard from './StudyCard';
-import { Swipeable } from 'react-swipeable';
+import classnames from 'classnames';
 import styled from 'styled-components';
 
-const SPACE_KEY = 32;
-const UP_KEY = 38;
-const DOWN_KEY = 40;
+// const SPACE_KEY = 32;
+// const UP_KEY = 38;
+// const DOWN_KEY = 40;
 
-const TRANSITION_DURATION = 300;
-
-const StyledSwipeable = styled(Swipeable)`
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  max-width: 500px;
+const SceneContainer = styled.div`
+  width: 100%;
   height: 100%;
   overflow-y: hidden;
 `;
 
-const StyledStudyCard = styled(StudyCard)`
-  transition: ${TRANSITION_DURATION}ms all;
-  top: 0%;
+const Scene = styled.div`
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
-  &.card-enter {
-  }
-  &.card-enter-active {
-    transition: ${TRANSITION_DURATION}ms all;
-    top: 0%;
-  }
-  &.card-enter-done {
-  }
-  &.card-exit-active {
-    ${props => (props.direction === 'up' ? `top: -100vh;` : `top: 100vh;`)}
-  }
-  &.card-exit-done {
-    transition: 0ms all;
-    ${props => (props.direction === 'up' ? `top: 100vh;` : `top: -100vh;`)}
-  }
+  width: 500px;
+  max-width: 100%;
+  height: 250px;
+`;
+
+const ListContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  transition: 0.3s top;
 `;
 
 class Study extends Component {
   state = {
-    transitioning: false,
-    transitionDirection: undefined,
     activeCardIndex: 0,
-    flipped: false,
+    activeCardFlipped: false,
+  };
+
+  listContainerRef = React.createRef();
+  cardRefs = [];
+
+  flipActiveCard = () => {
+    console.log('flipping');
+    this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
   };
 
   componentDidMount() {
-    document.addEventListener('keydown', event => {
-      switch (event.keyCode) {
-        case DOWN_KEY:
-          this.nextCard();
-          break;
-        case UP_KEY:
-          this.prevCard();
-          break;
-        case SPACE_KEY:
-          this.flipCard();
-          break;
-      }
-    });
+    this.cardRefs = this.props.deck.cards.map(() => React.createRef());
+
+    setTimeout(() => this.setState({ activeCardIndex: 2 }), 1000);
   }
 
-  prevCard = () => {
-    if (this.state.activeCardIndex > 0) {
-      this.setState({
-        transitioning: true,
-        transitionDirection: 'down',
-        flipped: false,
-      });
+  componentDidUpdate(_, prevState) {
+    if (prevState.activeCardIndex !== this.state.activeCardIndex) {
+      const activeCardElement = this.cardRefs[this.state.activeCardIndex].current;
+      this.listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
     }
-  };
-
-  nextCard = () => {
-    if (this.state.activeCardIndex < this.props.deck.cards.length - 1) {
-      this.setState({
-        transitioning: true,
-        transitionDirection: 'up',
-        flipped: false,
-      });
-    }
-  };
-
-  flipCard = () => {
-    this.setState(prevState => ({
-      flipped: !prevState.flipped,
-    }));
-  };
-
-  handleSwipe = ({ dir }) => {
-    if (dir === 'Up') {
-      this.nextCard();
-    } else if (dir === 'Down') {
-      this.prevCard();
-    }
-  };
-
-  handleTransitionExited = () => {
-    // Using a setTimeout to allow the card-exit-done class to be
-    // applied before transitioning to the enter state
-    setTimeout(
-      () =>
-        this.setState(({ transitionDirection, activeCardIndex }) => ({
-          transitioning: false,
-          activeCardIndex: transitionDirection === 'up' ? activeCardIndex + 1 : activeCardIndex - 1,
-        })),
-      50
-    );
-  };
+  }
 
   render() {
-    const { activeCardIndex, transitioning, transitionDirection, flipped } = this.state;
+    const { activeCardFlipped, activeCardIndex } = this.state;
     const { deck } = this.props;
 
     return (
-      // <Swipeable >
-      <StyledSwipeable onSwiped={this.handleSwipe}>
-        <CSSTransition
-          in={!transitioning}
-          timeout={TRANSITION_DURATION}
-          classNames="card"
-          onExited={this.handleTransitionExited}
-        >
-          {() => (
-            <StyledStudyCard
-              className="ml-2 mr-2"
-              card={deck.cards[activeCardIndex]}
-              direction={transitionDirection}
-              flipped={flipped}
-            />
-          )}
-        </CSSTransition>
-      </StyledSwipeable>
-      // </Swipeable>
+      <SceneContainer>
+        <Scene>
+          <ListContainer ref={this.listContainerRef}>
+            {deck.cards.map((card, i) => {
+              const isActive = i === activeCardIndex;
+
+              return (
+                <StudyCard
+                  ref={this.cardRefs[i]}
+                  key={card.id}
+                  className={classnames('mb-4', { active: isActive })}
+                  card={card}
+                  flipped={isActive && activeCardFlipped}
+                  onClick={this.flipActiveCard}
+                />
+              );
+            })}
+          </ListContainer>
+        </Scene>
+      </SceneContainer>
     );
   }
 }

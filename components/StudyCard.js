@@ -1,15 +1,28 @@
-import React, { Component } from 'react';
-
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
+import React from 'react';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
+// This container is necessary to apply the scale transform. We can't
+// apply a scale transform to CardContainer because it exists in 3D
+// space.
 const Container = styled.div`
-  position: relative;
   width: 100%;
-  height: 250px;
+  height: 100%;
+  min-height: 100%;
   cursor: pointer;
+  transition: 0.3s all;
+
+  &:not(.active) {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+`;
+
+const CardContainer = styled.div`
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
   transition: 0.3s all;
   transform: rotateY(0deg) scale(1);
@@ -63,12 +76,12 @@ const StyledCard = styled(Card)`
   }
 `;
 
-class StudyCard extends Component {
-  render() {
-    const { card, className, flipped } = this.props;
+const StudyCard = React.forwardRef((props, ref) => {
+  const { card, className, flipped, onClick } = props;
 
-    return (
-      <Container className={classnames(className, { flipped })} onClick={this.toggleFlipped}>
+  return (
+    <Container ref={ref} className={className} onClick={onClick}>
+      <CardContainer className={classnames({ flipped })}>
         <StyledCard className="front">
           <Card.Body>
             <Card.Subtitle className="mb-4">
@@ -85,15 +98,16 @@ class StudyCard extends Component {
             <Card.Text>{card.back}</Card.Text>
           </Card.Body>
         </StyledCard>
-      </Container>
-    );
-  }
-}
+      </CardContainer>
+    </Container>
+  );
+});
 
 StudyCard.propTypes = {
   card: PropTypes.object.isRequired,
   className: PropTypes.string,
   flipped: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default styled(StudyCard)``;
