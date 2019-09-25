@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import StudyCard from './StudyCard';
+import { Swipeable } from 'react-swipeable';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
@@ -9,7 +10,7 @@ const SPACE_KEY = 32;
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 
-const SceneContainer = styled.div`
+const StyledSwipeable = styled(Swipeable)`
   margin: 0 auto;
   width: 95%;
   height: 100%;
@@ -101,7 +102,7 @@ class Study extends Component {
     const { deck } = this.props;
 
     return (
-      <SceneContainer>
+      <StyledSwipeable onSwipedDown={this.prevCard} onSwipedUp={this.nextCard}>
         <Scene>
           <ListContainer ref={this.listContainerRef}>
             {deck.cards.map((card, i) => {
@@ -120,7 +121,7 @@ class Study extends Component {
             })}
           </ListContainer>
         </Scene>
-      </SceneContainer>
+      </StyledSwipeable>
     );
   }
 }
