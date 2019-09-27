@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
 import StudyCard from './StudyCard';
+import StudyProgressIndicator from './StudyProgressIndicator';
 import { Swipeable } from 'react-swipeable';
 import classnames from 'classnames';
 import styled from 'styled-components';
@@ -9,6 +10,8 @@ import styled from 'styled-components';
 const SPACE_KEY = 32;
 const UP_KEY = 38;
 const DOWN_KEY = 40;
+const LEFT_KEY = 37;
+const RIGHT_KEY = 39;
 
 const StyledSwipeable = styled(Swipeable)`
   margin: 0 auto;
@@ -45,6 +48,8 @@ class Study extends Component {
   state = {
     activeCardIndex: 0,
     activeCardFlipped: false,
+    // Map of card id -> boolean indicating correct or incorrect answers
+    answers: {},
   };
 
   listContainerRef = React.createRef();
@@ -52,6 +57,36 @@ class Study extends Component {
 
   flipActiveCard = () => {
     this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
+  };
+
+  markActiveCardCorrect = () => {
+    const { activeCardIndex } = this.state;
+    const { cards } = this.props.deck;
+    const activeCard = cards[activeCardIndex];
+
+    this.setState(prevState => ({
+      answers: {
+        ...prevState.answers,
+        [activeCard.id]: true,
+      },
+    }));
+
+    this.nextCard();
+  };
+
+  markActiveCardIncorrect = () => {
+    const { activeCardIndex } = this.state;
+    const { cards } = this.props.deck;
+    const activeCard = cards[activeCardIndex];
+
+    this.setState(prevState => ({
+      answers: {
+        ...prevState.answers,
+        [activeCard.id]: false,
+      },
+    }));
+
+    this.nextCard();
   };
 
   prevCard = () => {
@@ -86,6 +121,12 @@ class Study extends Component {
         case SPACE_KEY:
           this.flipActiveCard();
           break;
+        case LEFT_KEY:
+          this.markActiveCardIncorrect();
+          break;
+        case RIGHT_KEY:
+          this.markActiveCardCorrect();
+          break;
       }
     });
   }
@@ -98,30 +139,42 @@ class Study extends Component {
   }
 
   render() {
-    const { activeCardFlipped, activeCardIndex } = this.state;
+    const { activeCardFlipped, activeCardIndex, answers } = this.state;
     const { deck } = this.props;
 
     return (
-      <StyledSwipeable onSwipedDown={this.prevCard} onSwipedUp={this.nextCard}>
-        <Scene>
-          <ListContainer ref={this.listContainerRef}>
-            {deck.cards.map((card, i) => {
-              const isActive = i === activeCardIndex;
+      <>
+        <StudyProgressIndicator
+          cards={deck.cards}
+          answers={answers}
+          activeCardIndex={activeCardIndex}
+        />
+        <StyledSwipeable
+          onSwipedDown={this.prevCard}
+          onSwipedUp={this.nextCard}
+          onSwipedLeft={this.markActiveCardIncorrect}
+          onSwipedRight={this.markActiveCardCorrect}
+        >
+          <Scene>
+            <ListContainer ref={this.listContainerRef}>
+              {deck.cards.map((card, i) => {
+                const isActive = i === activeCardIndex;
 
-              return (
-                <StudyCard
-                  ref={this.cardRefs[i]}
-                  key={card.id}
-                  className={classnames('mb-4', { active: isActive })}
-                  card={card}
-                  flipped={isActive && activeCardFlipped}
-                  onClick={this.flipActiveCard}
-                />
-              );
-            })}
-          </ListContainer>
-        </Scene>
-      </StyledSwipeable>
+                return (
+                  <StudyCard
+                    ref={this.cardRefs[i]}
+                    key={card.id}
+                    className={classnames('mb-4', { active: isActive })}
+                    card={card}
+                    flipped={isActive && activeCardFlipped}
+                    onClick={this.flipActiveCard}
+                  />
+                );
+              })}
+            </ListContainer>
+          </Scene>
+        </StyledSwipeable>
+      </>
     );
   }
 }

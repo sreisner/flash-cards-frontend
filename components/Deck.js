@@ -42,6 +42,9 @@ class Deck extends Component {
                   (<Pluralize singular="card" count={deck.cards.length} />)
                 </small>
               </h1>
+              <Link href="/">
+                <a>👈 Home</a>
+              </Link>
             </Col>
             <Col>
               <Actions>
