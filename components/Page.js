@@ -8,49 +8,22 @@ import User from './User';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
+  display: flex;
+  flex-direction: column;
   background: white;
   color: ${props => props.theme.black};
+  height: 100vh;
 `;
 
 const Inner = styled.div`
-  ${props => {
-    const top = props.headerHeight ? props.headerHeight : 0;
-
-    return `
-      top: ${top}px;
-      height: calc(100vh - ${top}px);
-    `;
-  }}
-
   position: relative;
   max-width: ${props => props.theme.maxWidth};
   margin: 0 auto;
+  flex-grow: 1;
+  width: 100%;
 `;
 
 class Page extends Component {
-  header = React.createRef();
-  state = {
-    headerHeight: 0,
-  };
-
-  componentDidMount() {
-    // A hack to shift the content of the page below the fixed header
-    // after everything's rendered properly
-    setTimeout(() => this.shiftContentBelowHeader(), 0);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.children !== this.props.children) {
-      this.shiftContentBelowHeader();
-    }
-  }
-
-  shiftContentBelowHeader = () => {
-    this.setState({
-      headerHeight: this.header.current ? this.header.current.clientHeight : undefined,
-    });
-  };
-
   render() {
     return (
       <User>
@@ -58,8 +31,8 @@ class Page extends Component {
           <StyledPage>
             <Meta />
             <Notification />
-            {me && <Header ref={this.header} />}
-            <Inner headerHeight={this.state.headerHeight}>{this.props.children}</Inner>
+            {me && <Header />}
+            <Inner>{this.props.children}</Inner>
           </StyledPage>
         )}
       </User>
