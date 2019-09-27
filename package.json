@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next -p 7777",
-    "ngrok": "ngrok http 7777 -subdomain shawn-flash-frontend",
+    "ngrok": "ngrok http 7777 -subdomain shawn-flash-frontend -host-header=rewrite",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
