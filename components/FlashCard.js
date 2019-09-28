@@ -32,10 +32,8 @@ class FlashCard extends Component {
           <hr />
           <Card.Text>{card.back}</Card.Text>
           <CardActions className="text-right">
-            <>
-              <UpdateCardButton className="mr-2" id={card.id} />
-              <DeleteCardButton id={card.id} className="delete-deck-button" />
-            </>
+            <UpdateCardButton className="mr-2" id={card.id} />
+            <DeleteCardButton id={card.id} className="delete-deck-button" />
           </CardActions>
         </Card.Body>
       </StyledCard>

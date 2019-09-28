@@ -39,10 +39,8 @@ class DeckCard extends Component {
                 <Pluralize singular="card" count={deck.cards.length}></Pluralize>
               </Card.Text>
               <CardActions className="text-right">
-                <>
-                  <UpdateDeckButton className="mr-2" id={deck.id} />
-                  <DeleteDeckButton id={deck.id} />
-                </>
+                <UpdateDeckButton className="mr-2" id={deck.id} />
+                <DeleteDeckButton id={deck.id} />
               </CardActions>
             </Card.Body>
           </NoStyleAnchor>
