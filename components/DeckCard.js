@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Card from 'react-bootstrap/Card';
+import CardActions from './CardActions';
 import DeleteDeckButton from './DeleteDeckButton';
 import Link from 'next/link';
 import NoStyleAnchor from './styles/NoStyleAnchor';
@@ -37,10 +38,12 @@ class DeckCard extends Component {
               <Card.Text>
                 <Pluralize singular="card" count={deck.cards.length}></Pluralize>
               </Card.Text>
-              <div className="actions">
-                <UpdateDeckButton className="mr-2" id={deck.id} />
-                <DeleteDeckButton id={deck.id} className="delete-deck-button" />
-              </div>
+              <CardActions className="text-right">
+                <>
+                  <UpdateDeckButton className="mr-2" id={deck.id} />
+                  <DeleteDeckButton id={deck.id} />
+                </>
+              </CardActions>
             </Card.Body>
           </NoStyleAnchor>
         </Link>
