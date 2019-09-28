@@ -18,7 +18,7 @@ class CustomToggle extends React.Component {
   render() {
     return (
       <IconContainer onClick={this.handleClick} className="p-3">
-        <FontAwesomeIcon icon="ellipsis-v">{this.props.children}</FontAwesomeIcon>
+        <FontAwesomeIcon icon="ellipsis-v" />
       </IconContainer>
     );
   }
@@ -26,7 +26,6 @@ class CustomToggle extends React.Component {
 
 CustomToggle.propTypes = {
   onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
 };
 
 const CardActions = ({ className, children }) => (
