@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CardActions from './CardActions';
 import DeleteDeckButton from './DeleteDeckButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import NoStyleAnchor from './styles/NoStyleAnchor';
 import Pluralize from 'react-pluralize';
@@ -39,7 +41,12 @@ class DeckCard extends Component {
                 <Pluralize singular="card" count={deck.cards.length}></Pluralize>
               </Card.Text>
               <CardActions className="text-right">
-                <UpdateDeckButton className="mr-2" id={deck.id} />
+                <Link href={`/study?id=${deck.id}`}>
+                  <Button variant="success">
+                    <FontAwesomeIcon icon={['fad', 'book-reader']} size="2x" />
+                  </Button>
+                </Link>
+                <UpdateDeckButton className="mx-2" id={deck.id} />
                 <DeleteDeckButton id={deck.id} />
               </CardActions>
             </Card.Body>

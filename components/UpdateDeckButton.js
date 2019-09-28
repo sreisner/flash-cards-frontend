@@ -10,14 +10,14 @@ const UpdateDeckButton = ({ id, className }) => (
     <Mutation mutation={OPEN_UPDATE_DECK_DIALOG_MUTATION}>
       {openUpdateDeckDialog => (
         <Button
-          variant="outline-secondary"
+          variant="secondary"
           className={className}
           onClick={event => {
             event.preventDefault();
             openUpdateDeckDialog({ variables: { id } });
           }}
         >
-          <FontAwesomeIcon icon={['fad', 'pencil']} />
+          <FontAwesomeIcon icon={['fad', 'pencil']} size="2x" />
         </Button>
       )}
     </Mutation>

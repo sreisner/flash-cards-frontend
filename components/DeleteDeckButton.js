@@ -26,7 +26,7 @@ const DeleteDeckButton = ({ id, className }) => (
       >
         {(deleteDeck, { loading }) => (
           <Button
-            variant="outline-danger"
+            variant="danger"
             onClick={async event => {
               event.stopPropagation();
               try {
@@ -43,7 +43,7 @@ const DeleteDeckButton = ({ id, className }) => (
             disabled={loading}
             className={className}
           >
-            <FontAwesomeIcon icon={['fad', 'trash']} />
+            <FontAwesomeIcon icon={['fad', 'trash']} size="2x" />
           </Button>
         )}
       </Mutation>
