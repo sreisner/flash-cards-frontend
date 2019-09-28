@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Logo from './Logo';
 import NProgress from 'nprogress';
 import Nav from './Nav';
-import PropTypes from 'prop-types';
 import Router from 'next/router';
 import styled from 'styled-components';
 
@@ -37,10 +36,8 @@ const StyledHeader = styled.header`
 
 class Header extends PureComponent {
   render() {
-    const { innerRef } = this.props;
-
     return (
-      <StyledHeader ref={innerRef}>
+      <StyledHeader>
         <Link href="/">
           <a>
             <Logo className="logo" />
@@ -54,8 +51,4 @@ class Header extends PureComponent {
   }
 }
 
-Header.propTypes = {
-  innerRef: PropTypes.any.isRequired,
-};
-
-export default React.forwardRef((props, ref) => <Header innerRef={ref} {...props} />);
+export default Header;
