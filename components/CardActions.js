@@ -2,6 +2,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
+
+const IconContainer = styled.span`
+  cursor: pointer;
+`;
 
 class CustomToggle extends React.Component {
   handleClick = event => {
@@ -12,9 +17,9 @@ class CustomToggle extends React.Component {
 
   render() {
     return (
-      <span onClick={this.handleClick} className="p-3">
+      <IconContainer onClick={this.handleClick} className="p-3">
         <FontAwesomeIcon icon="ellipsis-v">{this.props.children}</FontAwesomeIcon>
-      </span>
+      </IconContainer>
     );
   }
 }
