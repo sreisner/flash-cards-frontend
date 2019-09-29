@@ -15,11 +15,7 @@ class Nav extends Component {
         {({ loading, error }) => {
           if (loading) return null;
           if (error) return <Error error={error} />;
-          return (
-            <div>
-              <Signout />
-            </div>
-          );
+          return <Signout />;
         }}
       </User>
     );

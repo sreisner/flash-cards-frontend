@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import CreateCardButton from './CreateCardButton';
 import FlashCard from './FlashCard';
+import Header from './Header';
 import { LOCAL_STATE_QUERY } from '../lib/withData';
 import Link from 'next/link';
 import Masonry from 'react-masonry-component';
@@ -12,6 +14,7 @@ import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import Row from 'react-bootstrap/Row';
+import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import UpdateCardDialog from './UpdateCardDialog';
 import styled from 'styled-components';
 
@@ -19,6 +22,27 @@ const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+
+const DeckBreadcrumb = ({ name }) => (
+  <TransparentBreadcrumb>
+    <Breadcrumb.Item
+      as={() => (
+        <li className="breadcrumb-item">
+          <Link href="/">
+            <a>Decks</a>
+          </Link>
+        </li>
+      )}
+    >
+      Decks
+    </Breadcrumb.Item>
+    <Breadcrumb.Item active>{name}</Breadcrumb.Item>
+  </TransparentBreadcrumb>
+);
+
+DeckBreadcrumb.propTypes = {
+  name: PropTypes.string.isRequired,
+};
 
 class Deck extends Component {
   render() {
@@ -33,6 +57,7 @@ class Deck extends Component {
             },
           }) => <UpdateCardDialog id={id} isOpen={isOpen} />}
         </Query>
+        <Header breadcrumb={<DeckBreadcrumb name={deck.name} />} />
         <Container className="pt-4">
           <Row className="align-items-center mb-4">
             <Col>
@@ -42,9 +67,6 @@ class Deck extends Component {
                   (<Pluralize singular="card" count={deck.cards.length} />)
                 </small>
               </h1>
-              <Link href="/">
-                <a>👈 Home</a>
-              </Link>
             </Col>
             <Col>
               <Actions>

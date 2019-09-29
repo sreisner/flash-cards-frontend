@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Header from './Header';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import StudyCard from './StudyCard';
 import StudyProgressIndicator from './StudyProgressIndicator';
 import { Swipeable } from 'react-swipeable';
+import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
@@ -43,6 +47,37 @@ const ListContainer = styled.div`
 
   transition: 0.3s top;
 `;
+
+const StudyBreadcrumb = ({ deck }) => (
+  <TransparentBreadcrumb>
+    <Breadcrumb.Item
+      as={() => (
+        <li className="breadcrumb-item">
+          <Link href="/">
+            <a>Decks</a>
+          </Link>
+        </li>
+      )}
+    />
+    <Breadcrumb.Item
+      as={() => (
+        <li className="breadcrumb-item">
+          <Link href={`/deck?id=${deck.id}`}>
+            <a>{deck.name}</a>
+          </Link>
+        </li>
+      )}
+    />
+    <Breadcrumb.Item active>Study</Breadcrumb.Item>
+  </TransparentBreadcrumb>
+);
+
+StudyBreadcrumb.propTypes = {
+  deck: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }),
+};
 
 class Study extends Component {
   state = {
@@ -144,6 +179,7 @@ class Study extends Component {
 
     return (
       <>
+        <Header breadcrumb={<StudyBreadcrumb deck={deck} />} />
         <StudyProgressIndicator
           cards={deck.cards}
           answers={answers}

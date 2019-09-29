@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 
-import Header from './Header';
 import Meta from './Meta';
 import Notification from './Notification';
 import PropTypes from 'prop-types';
-import User from './User';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
@@ -26,16 +24,11 @@ const Inner = styled.div`
 class Page extends Component {
   render() {
     return (
-      <User>
-        {({ data: { me } }) => (
-          <StyledPage>
-            <Meta />
-            <Notification />
-            {me && <Header />}
-            <Inner>{this.props.children}</Inner>
-          </StyledPage>
-        )}
-      </User>
+      <StyledPage>
+        <Meta />
+        <Notification />
+        <Inner>{this.props.children}</Inner>
+      </StyledPage>
     );
   }
 }

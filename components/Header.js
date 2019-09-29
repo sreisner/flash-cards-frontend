@@ -4,7 +4,9 @@ import Link from 'next/link';
 import Logo from './Logo';
 import NProgress from 'nprogress';
 import Nav from './Nav';
+import PropTypes from 'prop-types';
 import Router from 'next/router';
+import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import styled from 'styled-components';
 
 Router.onRouteChangeStart = () => {
@@ -20,35 +22,52 @@ Router.onRouteChangeError = () => {
 };
 
 const StyledHeader = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
-  padding: 0 20px;
   background: white;
-  z-index: 1;
-  border-bottom: 1px solid lightgrey;
 
   .logo {
     width: 100px;
+  }
+
+  .main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid lightgrey;
+    padding: 0 20px;
+  }
+
+  .breadcrumb-container .breadcrumb {
+    padding: 0;
   }
 `;
 
 class Header extends PureComponent {
   render() {
+    const { breadcrumb } = this.props;
+
     return (
       <StyledHeader>
-        <Link href="/">
-          <a>
-            <Logo className="logo" />
-          </a>
-        </Link>
-        <div>
+        <div className="main">
+          <Link href="/">
+            <a>
+              <Logo className="logo" />
+            </a>
+          </Link>
           <Nav />
         </div>
+        {breadcrumb && (
+          <div className="breadcrumb-container pt-2 pl-4">
+            <TransparentBreadcrumb>{breadcrumb}</TransparentBreadcrumb>
+          </div>
+        )}
       </StyledHeader>
     );
   }
 }
+
+Header.propTypes = {
+  breadcrumb: PropTypes.node,
+};
 
 export default Header;

@@ -2,6 +2,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import CreateDeckButton from './CreateDeckButton';
 import DeckCard from './DeckCard';
+import Header from './Header';
 import { LOCAL_STATE_QUERY } from '../lib/withData';
 import Masonry from 'react-masonry-component';
 import Pluralize from 'react-pluralize';
@@ -27,6 +28,7 @@ const Home = () => {
           },
         }) => <UpdateDeckDialog id={id} isOpen={isOpen} />}
       </Query>
+      <Header />
       <User>
         {({ data: { me } }) => {
           return (
