@@ -37,14 +37,20 @@ const StyledHeader = styled.header`
     padding: 0 20px;
   }
 
-  .breadcrumb-container .breadcrumb {
-    padding: 0;
+  .secondary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .breadcrumb {
+      padding: 0;
+    }
   }
 `;
 
 class Header extends PureComponent {
   render() {
-    const { breadcrumb } = this.props;
+    const { breadcrumb, extra } = this.props;
 
     return (
       <StyledHeader>
@@ -56,9 +62,10 @@ class Header extends PureComponent {
           </Link>
           <Nav />
         </div>
-        {breadcrumb && (
-          <div className="breadcrumb-container pt-2 pl-4">
+        {(breadcrumb || extra) && (
+          <div className="secondary pt-2 px-5">
             <TransparentBreadcrumb>{breadcrumb}</TransparentBreadcrumb>
+            {extra}
           </div>
         )}
       </StyledHeader>
@@ -68,6 +75,7 @@ class Header extends PureComponent {
 
 Header.propTypes = {
   breadcrumb: PropTypes.node,
+  extra: PropTypes.any,
 };
 
 export default Header;

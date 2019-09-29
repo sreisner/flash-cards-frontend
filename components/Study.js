@@ -5,6 +5,7 @@ import Header from './Header';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import StudyCard from './StudyCard';
+import StudyHelp from './StudyHelp';
 import StudyProgressIndicator from './StudyProgressIndicator';
 import { Swipeable } from 'react-swipeable';
 import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
@@ -179,7 +180,7 @@ class Study extends Component {
 
     return (
       <>
-        <Header breadcrumb={<StudyBreadcrumb deck={deck} />} />
+        <Header breadcrumb={<StudyBreadcrumb deck={deck} />} extra={<StudyHelp />} />
         <StudyProgressIndicator
           cards={deck.cards}
           answers={answers}
