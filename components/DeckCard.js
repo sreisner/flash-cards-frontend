@@ -41,12 +41,14 @@ class DeckCard extends Component {
                 <Pluralize singular="card" count={deck.cards.length}></Pluralize>
               </Card.Text>
               <CardActions className="text-right">
-                <Link href={`/study?id=${deck.id}`}>
-                  <Button variant="success">
-                    <FontAwesomeIcon icon={['fad', 'book-reader']} size="2x" />
-                  </Button>
-                </Link>
-                <UpdateDeckButton className="mx-2" id={deck.id} />
+                {deck.cards.length > 0 && (
+                  <Link href={`/study?id=${deck.id}`}>
+                    <Button variant="success">
+                      <FontAwesomeIcon icon={['fad', 'book-reader']} size="2x" />
+                    </Button>
+                  </Link>
+                )}
+                <UpdateDeckButton id={deck.id} />
                 <DeleteDeckButton id={deck.id} />
               </CardActions>
             </Card.Body>

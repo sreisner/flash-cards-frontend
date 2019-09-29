@@ -8,6 +8,14 @@ const IconContainer = styled.span`
   cursor: pointer;
 `;
 
+const StyledMenu = styled(Dropdown.Menu)`
+  min-width: initial;
+
+  & > *:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+`;
+
 class CustomToggle extends React.Component {
   handleClick = event => {
     event.preventDefault();
@@ -32,9 +40,7 @@ const CardActions = ({ className, children }) => (
   <Dropdown className={className}>
     <Dropdown.Toggle as={CustomToggle} />
 
-    <Dropdown.Menu style={{ minWidth: 'initial' }} className="px-2">
-      {children}
-    </Dropdown.Menu>
+    <StyledMenu className="px-2">{children}</StyledMenu>
   </Dropdown>
 );
 

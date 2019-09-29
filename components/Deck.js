@@ -71,9 +71,11 @@ class Deck extends Component {
             <Col>
               <Actions>
                 <CreateCardButton className="mr-2" deckId={deck.id} />
-                <Link href={`/study?id=${deck.id}`}>
-                  <Button variant="success">Study</Button>
-                </Link>
+                {deck.cards.length > 0 && (
+                  <Link href={`/study?id=${deck.id}`}>
+                    <Button variant="success">Study</Button>
+                  </Link>
+                )}
               </Actions>
             </Col>
           </Row>
