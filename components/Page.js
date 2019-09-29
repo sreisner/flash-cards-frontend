@@ -6,8 +6,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
-  display: flex;
-  flex-direction: column;
   background: white;
   color: ${props => props.theme.black};
   height: 100vh;
@@ -17,7 +15,7 @@ const Inner = styled.div`
   position: relative;
   max-width: ${props => props.theme.maxWidth};
   margin: 0 auto;
-  flex-grow: 1;
+  height: 100%;
   width: 100%;
 `;
 

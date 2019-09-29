@@ -18,10 +18,16 @@ const DOWN_KEY = 40;
 const LEFT_KEY = 37;
 const RIGHT_KEY = 39;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 const StyledSwipeable = styled(Swipeable)`
   margin: 0 auto;
   width: 95%;
-  height: 100%;
+  flex-grow: 1;
   overflow-y: hidden;
 `;
 
@@ -179,7 +185,7 @@ class Study extends Component {
     const { deck } = this.props;
 
     return (
-      <>
+      <Container>
         <Header breadcrumb={<StudyBreadcrumb deck={deck} />} extra={<StudyHelp />} />
         <StudyProgressIndicator
           cards={deck.cards}
@@ -211,7 +217,7 @@ class Study extends Component {
             </ListContainer>
           </Scene>
         </StyledSwipeable>
-      </>
+      </Container>
     );
   }
 }
