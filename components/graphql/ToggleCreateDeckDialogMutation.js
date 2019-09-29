@@ -12,7 +12,7 @@ const ToggleCreateDeckDialogMutation = ({ children }) => (
 );
 
 ToggleCreateDeckDialogMutation.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
 };
 
 export default ToggleCreateDeckDialogMutation;

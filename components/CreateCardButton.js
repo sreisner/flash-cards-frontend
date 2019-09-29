@@ -1,26 +1,21 @@
 import Button from 'react-bootstrap/Button';
-import CreateCardDialog from './CreateCardDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mutation } from 'react-apollo';
-import { OPEN_CREATE_CARD_DIALOG_MUTATION } from '../lib/withData';
+import OpenCreateCardDialogMutation from './graphql/OpenCreateCardDialogMutation';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 const CreateCardButton = ({ deckId, className }) => (
-  <>
-    <Mutation mutation={OPEN_CREATE_CARD_DIALOG_MUTATION}>
-      {openCreateCardDialog => (
-        <Button
-          variant="primary"
-          className={className}
-          onClick={() => openCreateCardDialog({ variables: { deckId } })}
-        >
-          <FontAwesomeIcon icon="plus" /> Add a Card
-        </Button>
-      )}
-    </Mutation>
-    <CreateCardDialog />
-  </>
+  <OpenCreateCardDialogMutation>
+    {openCreateCardDialog => (
+      <Button
+        variant="primary"
+        className={className}
+        onClick={() => openCreateCardDialog({ variables: { deckId } })}
+      >
+        <FontAwesomeIcon icon="plus" /> Add a Card
+      </Button>
+    )}
+  </OpenCreateCardDialogMutation>
 );
 
 CreateCardButton.propTypes = {

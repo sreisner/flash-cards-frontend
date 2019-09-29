@@ -10,6 +10,7 @@ import Header from './Header';
 import { LOCAL_STATE_QUERY } from '../lib/withData';
 import Link from 'next/link';
 import Masonry from 'react-masonry-component';
+import NoFlashCardsCard from './NoFlashCardsCard';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
@@ -81,6 +82,11 @@ class Deck extends Component {
           </Row>
 
           <Masonry>
+            {deck.cards.length === 0 && (
+              <Col lg={4}>
+                <NoFlashCardsCard deckId={deck.id} />
+              </Col>
+            )}
             {deck.cards.map(card => (
               <Col lg={4} key={card.id}>
                 <FlashCard className="mb-4" card={card} />
