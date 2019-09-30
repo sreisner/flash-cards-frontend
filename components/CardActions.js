@@ -26,7 +26,7 @@ class CustomToggle extends React.Component {
   render() {
     return (
       <IconContainer onClick={this.handleClick} className="p-3">
-        <FontAwesomeIcon icon="ellipsis-v" />
+        <FontAwesomeIcon icon="ellipsis-v" size="1x" />
       </IconContainer>
     );
   }

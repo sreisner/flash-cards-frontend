@@ -7,6 +7,7 @@ $enable-rounded: false;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 @import url('https://use.typekit.net/fee2mdm.css');
+@import '../node_modules/@fortawesome/fontawesome-svg-core/styles';
 
 body {
   font-family: proxima-nova, cursive;
