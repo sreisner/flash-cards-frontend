@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-
 import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
 
 const LogoStyles = styled.img`
@@ -8,19 +7,13 @@ const LogoStyles = styled.img`
   max-width: 100%;
 `;
 
-class Logo extends Component {
-  render() {
-    const { className, hasWords } = this.props;
-
-    return (
-      <LogoStyles
-        src={hasWords ? '/static/logo.png' : '/static/owl.png'}
-        className={className}
-        alt="Simple Flash Cards logo"
-      />
-    );
-  }
-}
+const Logo = ({ hasWords, className }) => (
+  <LogoStyles
+    src={hasWords ? '/static/logo.png' : '/static/owl.png'}
+    className={className}
+    alt="Simple Flash Cards logo"
+  />
+);
 
 Logo.propTypes = {
   className: PropTypes.string,

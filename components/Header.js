@@ -1,10 +1,9 @@
-import React, { PureComponent } from 'react';
-
 import Link from 'next/link';
 import Logo from './Logo';
 import NProgress from 'nprogress';
 import Nav from './Nav';
 import PropTypes from 'prop-types';
+import React from 'react';
 import Router from 'next/router';
 import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import styled from 'styled-components';
@@ -47,30 +46,24 @@ const StyledHeader = styled.header`
   }
 `;
 
-class Header extends PureComponent {
-  render() {
-    const { breadcrumb, extra } = this.props;
-
-    return (
-      <StyledHeader className="px-3">
-        <div className="main">
-          <Link href="/">
-            <a>
-              <Logo className="logo" />
-            </a>
-          </Link>
-          <Nav />
-        </div>
-        {(breadcrumb || extra) && (
-          <div className="secondary pt-2">
-            <TransparentBreadcrumb>{breadcrumb}</TransparentBreadcrumb>
-            {extra}
-          </div>
-        )}
-      </StyledHeader>
-    );
-  }
-}
+const Header = ({ breadcrumb, extra }) => (
+  <StyledHeader className="px-3">
+    <div className="main">
+      <Link href="/">
+        <a>
+          <Logo className="logo" />
+        </a>
+      </Link>
+      <Nav />
+    </div>
+    {(breadcrumb || extra) && (
+      <div className="secondary pt-2">
+        <TransparentBreadcrumb>{breadcrumb}</TransparentBreadcrumb>
+        {extra}
+      </div>
+    )}
+  </StyledHeader>
+);
 
 Header.propTypes = {
   breadcrumb: PropTypes.node,

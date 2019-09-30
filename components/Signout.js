@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-
 import Button from 'react-bootstrap/Button';
 import { CURRENT_USER_QUERY } from './User';
-import { Mutation } from 'react-apollo';
+import React from 'react';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
+import { useMutation } from '@apollo/react-hooks';
 
 const SIGNOUT_MUTATION = gql`
   mutation {
@@ -20,36 +19,28 @@ const StyledButton = styled(Button)`
   padding-right: 0;
 `;
 
-class Signout extends Component {
-  async handleSignout(signout) {
-    await signout();
+const Signout = () => {
+  const [signout, { loading }] = useMutation(SIGNOUT_MUTATION, {
+    refetchQueries: [
+      {
+        query: CURRENT_USER_QUERY,
+      },
+    ],
+  });
 
-    Router.push('/login');
-  }
-
-  render() {
-    return (
-      <Mutation
-        mutation={SIGNOUT_MUTATION}
-        refetchQueries={[
-          {
-            query: CURRENT_USER_QUERY,
-          },
-        ]}
-      >
-        {(signout, { loading }) => (
-          <StyledButton
-            type="button"
-            onClick={() => this.handleSignout(signout)}
-            disabled={loading}
-            variant="link"
-          >
-            Sign Out
-          </StyledButton>
-        )}
-      </Mutation>
-    );
-  }
-}
+  return (
+    <StyledButton
+      type="button"
+      onClick={async () => {
+        await signout();
+        Router.push('/login');
+      }}
+      disabled={loading}
+      variant="link"
+    >
+      Sign Out
+    </StyledButton>
+  );
+};
 
 export default Signout;

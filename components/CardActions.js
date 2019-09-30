@@ -1,7 +1,8 @@
+import React, { forwardRef } from 'react';
+
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import React from 'react';
 import styled from 'styled-components';
 
 const IconContainer = styled.span`
@@ -16,21 +17,18 @@ const StyledMenu = styled(Dropdown.Menu)`
   }
 `;
 
-class CustomToggle extends React.Component {
-  handleClick = event => {
-    event.preventDefault();
-
-    this.props.onClick(event);
-  };
-
-  render() {
-    return (
-      <IconContainer onClick={this.handleClick} className="p-3">
-        <FontAwesomeIcon icon="ellipsis-v" size="1x" />
-      </IconContainer>
-    );
-  }
-}
+const CustomToggle = forwardRef(({ onClick }, ref) => (
+  <IconContainer
+    onClick={event => {
+      event.preventDefault();
+      onClick(event);
+    }}
+    className="p-3"
+    ref={ref}
+  >
+    <FontAwesomeIcon icon="ellipsis-v" size="1x" />
+  </IconContainer>
+));
 
 CustomToggle.propTypes = {
   onClick: PropTypes.func.isRequired,

@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-
 import Card from 'react-bootstrap/Card';
 import CardActions from './CardActions';
 import DeleteCardButton from './DeleteCardButton';
 import PropTypes from 'prop-types';
+import React from 'react';
 import UpdateCardButton from './UpdateCardButton';
 import styled from 'styled-components';
 
@@ -21,25 +20,19 @@ const StyledCard = styled(Card)`
   }
 `;
 
-class FlashCard extends Component {
-  render() {
-    const { card, className } = this.props;
-
-    return (
-      <StyledCard className={className}>
-        <Card.Body>
-          <Card.Subtitle>{card.front}</Card.Subtitle>
-          <hr />
-          <Card.Text>{card.back}</Card.Text>
-          <CardActions className="text-right">
-            <UpdateCardButton className="mr-2" id={card.id} />
-            <DeleteCardButton id={card.id} className="delete-deck-button" />
-          </CardActions>
-        </Card.Body>
-      </StyledCard>
-    );
-  }
-}
+const FlashCard = ({ card, className }) => (
+  <StyledCard className={className}>
+    <Card.Body>
+      <Card.Subtitle>{card.front}</Card.Subtitle>
+      <hr />
+      <Card.Text>{card.back}</Card.Text>
+      <CardActions className="text-right">
+        <UpdateCardButton className="mr-2" id={card.id} />
+        <DeleteCardButton id={card.id} className="delete-deck-button" />
+      </CardActions>
+    </Card.Body>
+  </StyledCard>
+);
 
 FlashCard.propTypes = {
   card: PropTypes.shape({

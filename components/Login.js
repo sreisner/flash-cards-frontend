@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import User, { CURRENT_USER_QUERY } from './User';
+import React, { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
+import { CURRENT_USER_QUERY } from './User';
 import Col from 'react-bootstrap/Col';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
-import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import Row from 'react-bootstrap/Row';
 import gql from 'graphql-tag';
@@ -43,102 +43,86 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-class Login extends Component {
-  state = {
-    email: '',
-    password: '',
-  };
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
+  const [login, { error, loading }] = useMutation(LOGIN_MUTATION, {
+    variables: { email, password },
+    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+  });
+  const {
+    data: { me },
+  } = useQuery(CURRENT_USER_QUERY);
 
-  render() {
-    return (
-      <User>
-        {({ data: { me } }) => {
-          if (me) {
-            Router.push('/');
-            return null;
-          }
-
-          return (
-            <Mutation
-              mutation={LOGIN_MUTATION}
-              variables={this.state}
-              refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-            >
-              {(login, { error, loading }) => (
-                <StyledPage className="px-2">
-                  <Logo hasWords className="mb-4" />
-                  <Form
-                    className="form"
-                    method="post"
-                    onSubmit={async event => {
-                      event.preventDefault();
-                      await login();
-                      Router.push('/');
-                    }}
-                  >
-                    <fieldset disabled={loading} aria-busy={loading}>
-                      <Error error={error} />
-                      <Form.Group>
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          value={this.state.email}
-                          onChange={this.handleChange}
-                        />
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          id="password"
-                          name="password"
-                          required
-                          value={this.state.password}
-                          onChange={this.handleChange}
-                        />
-                      </Form.Group>
-
-                      <Row>
-                        <Col lg={true}>
-                          <Button variant="primary" size="lg" type="submit" className="mb-2">
-                            Sign In!
-                          </Button>
-                        </Col>
-                        <Col lg={true}>
-                          <Row className="secondary-links">
-                            <Col lg={true}>
-                              <Link href="/signup">
-                                <a>Sign Up</a>
-                              </Link>
-                            </Col>
-                            <Col lg={true}>
-                              <Link href="/forgot-password">
-                                <a>Forgot Password?</a>
-                              </Link>
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Row>
-                    </fieldset>
-                  </Form>
-                </StyledPage>
-              )}
-            </Mutation>
-          );
-        }}
-      </User>
-    );
+  if (me) {
+    Router.push('/');
+    return null;
   }
-}
+
+  return (
+    <StyledPage className="px-2">
+      <Logo hasWords className="mb-4" />
+      <Form
+        className="form"
+        method="post"
+        onSubmit={async event => {
+          event.preventDefault();
+          await login();
+          Router.push('/');
+        }}
+      >
+        <fieldset disabled={loading} aria-busy={loading}>
+          <Error error={error} />
+          <Form.Group>
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              id="email"
+              name="email"
+              required
+              value={email}
+              onChange={event => setEmail(event.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              id="password"
+              name="password"
+              required
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+            />
+          </Form.Group>
+
+          <Row>
+            <Col lg={true}>
+              <Button variant="primary" size="lg" type="submit" className="mb-2">
+                Sign In!
+              </Button>
+            </Col>
+            <Col lg={true}>
+              <Row className="secondary-links">
+                <Col lg={true}>
+                  <Link href="/signup">
+                    <a>Sign Up</a>
+                  </Link>
+                </Col>
+                <Col lg={true}>
+                  <Link href="/forgot-password">
+                    <a>Forgot Password?</a>
+                  </Link>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </fieldset>
+      </Form>
+    </StyledPage>
+  );
+};
 
 export default Login;

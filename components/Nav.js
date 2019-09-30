@@ -1,25 +1,15 @@
-import React, { Component } from 'react';
-
+import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage';
+import React from 'react';
 import Signout from './Signout';
-import User from './User';
+import { useQuery } from '@apollo/react-hooks';
 
-class Nav extends Component {
-  shouldComponentUpdate() {
-    return false;
-  }
+const Nav = () => {
+  const { loading, error } = useQuery(CURRENT_USER_QUERY);
 
-  render() {
-    return (
-      <User>
-        {({ loading, error }) => {
-          if (loading) return null;
-          if (error) return <Error error={error} />;
-          return <Signout />;
-        }}
-      </User>
-    );
-  }
-}
+  if (loading) return null;
+  if (error) return <Error error={error} />;
+  return <Signout />;
+};
 
 export default Nav;

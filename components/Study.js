@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Header from './Header';
@@ -87,151 +87,122 @@ StudyBreadcrumb.propTypes = {
   }),
 };
 
-class Study extends Component {
-  state = {
-    activeCardIndex: 0,
-    activeCardFlipped: false,
-    // Map of card id -> boolean indicating correct or incorrect answers
-    answers: {},
-  };
+const Study = ({ deck }) => {
+  const [activeCardFlipped, setActiveCardFlipped] = useState(false);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [answers, setAnswers] = useState({});
 
-  listContainerRef = React.createRef();
-  cardRefs = [];
+  const listContainerRef = useRef(null);
+  let cardRefs = [];
 
-  handleCardClick = cardIndex => {
-    const { activeCardIndex } = this.state;
-
-    if (cardIndex === activeCardIndex) {
-      this.flipActiveCard();
-    } else if (cardIndex < activeCardIndex) {
-      this.prevCard();
-    } else {
-      this.nextCard();
-    }
-  };
-
-  flipActiveCard = () => {
-    this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
-  };
-
-  markActiveCardCorrect = () => {
-    const { activeCardIndex } = this.state;
-    const { cards } = this.props.deck;
-    const activeCard = cards[activeCardIndex];
-
-    this.setState(prevState => ({
-      answers: {
-        ...prevState.answers,
-        [activeCard.id]: true,
-      },
-    }));
-
-    this.nextCard();
-  };
-
-  markActiveCardIncorrect = () => {
-    const { activeCardIndex } = this.state;
-    const { cards } = this.props.deck;
-    const activeCard = cards[activeCardIndex];
-
-    this.setState(prevState => ({
-      answers: {
-        ...prevState.answers,
-        [activeCard.id]: false,
-      },
-    }));
-
-    this.nextCard();
-  };
-
-  prevCard = () => {
-    if (this.state.activeCardIndex > 0) {
-      this.setState(({ activeCardIndex }) => ({
-        activeCardIndex: activeCardIndex - 1,
-        activeCardFlipped: false,
-      }));
-    }
-  };
-
-  nextCard = () => {
-    if (this.state.activeCardIndex < this.props.deck.cards.length - 1) {
-      this.setState(({ activeCardIndex }) => ({
-        activeCardIndex: activeCardIndex + 1,
-        activeCardFlipped: false,
-      }));
-    }
-  };
-
-  componentDidMount() {
-    this.cardRefs = this.props.deck.cards.map(() => React.createRef());
-
+  useEffect(() => {
+    const activeCardElement = cardRefs[activeCardIndex].current;
+    listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
+  }, [activeCardIndex]);
+  useEffect(() => {
+    cardRefs = deck.cards.map(() => useRef(null));
+  }, [deck]);
+  useEffect(() => {
     document.addEventListener('keydown', event => {
       switch (event.keyCode) {
         case DOWN_KEY:
-          this.nextCard();
+          nextCard();
           break;
         case UP_KEY:
-          this.prevCard();
+          prevCard();
           break;
         case SPACE_KEY:
-          this.flipActiveCard();
+          setActiveCardFlipped(activeCardFlipped => !activeCardFlipped);
           break;
         case LEFT_KEY:
-          this.markActiveCardIncorrect();
+          markActiveCardIncorrect();
           break;
         case RIGHT_KEY:
-          this.markActiveCardCorrect();
+          markActiveCardCorrect();
           break;
       }
     });
-  }
+  }, []);
 
-  componentDidUpdate(_, prevState) {
-    if (prevState.activeCardIndex !== this.state.activeCardIndex) {
-      const activeCardElement = this.cardRefs[this.state.activeCardIndex].current;
-      this.listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
+  const handleCardClick = index => {
+    if (index === activeCardIndex) {
+      setActiveCardFlipped(activeCardFlipped => !activeCardFlipped);
+    } else if (index < activeCardIndex) {
+      prevCard();
+    } else {
+      nextCard();
     }
-  }
+  };
 
-  render() {
-    const { activeCardFlipped, activeCardIndex, answers } = this.state;
-    const { deck } = this.props;
+  const markActiveCardCorrect = () => {
+    const { cards } = deck;
+    const activeCard = cards[activeCardIndex];
 
-    return (
-      <Container>
-        <Header breadcrumb={<StudyBreadcrumb deck={deck} />} extra={<StudyHelp />} />
-        <StudyProgressIndicator
-          cards={deck.cards}
-          answers={answers}
-          activeCardIndex={activeCardIndex}
-        />
-        <StyledSwipeable
-          onSwipedLeft={this.markActiveCardIncorrect}
-          onSwipedRight={this.markActiveCardCorrect}
-        >
-          <Scene>
-            <ListContainer ref={this.listContainerRef}>
-              {deck.cards.map((card, i) => {
-                const isActive = i === activeCardIndex;
+    setAnswers(answers => ({
+      ...answers,
+      [activeCard.id]: true,
+    }));
 
-                return (
-                  <StudyCard
-                    ref={this.cardRefs[i]}
-                    key={card.id}
-                    className={classnames('mb-4', { active: isActive })}
-                    card={card}
-                    flipped={isActive && activeCardFlipped}
-                    onClick={() => this.handleCardClick(i)}
-                  />
-                );
-              })}
-            </ListContainer>
-          </Scene>
-        </StyledSwipeable>
-      </Container>
-    );
-  }
-}
+    nextCard();
+  };
+
+  const markActiveCardIncorrect = () => {
+    const { cards } = deck;
+    const activeCard = cards[activeCardIndex];
+
+    setAnswers(answers => ({
+      ...answers,
+      [activeCard.id]: false,
+    }));
+
+    nextCard();
+  };
+
+  const prevCard = () => {
+    if (activeCardIndex > 0) {
+      setActiveCardIndex(activeCardIndex => activeCardIndex - 1);
+      setActiveCardFlipped(false);
+    }
+  };
+
+  const nextCard = () => {
+    if (activeCardIndex < deck.cards.length - 1) {
+      setActiveCardIndex(activeCardIndex => activeCardIndex + 1);
+      setActiveCardFlipped(false);
+    }
+  };
+
+  return (
+    <Container>
+      <Header breadcrumb={<StudyBreadcrumb deck={deck} />} extra={<StudyHelp />} />
+      <StudyProgressIndicator
+        cards={deck.cards}
+        answers={answers}
+        activeCardIndex={activeCardIndex}
+      />
+      <StyledSwipeable onSwipedLeft={markActiveCardIncorrect} onSwipedRight={markActiveCardCorrect}>
+        <Scene>
+          <ListContainer ref={listContainerRef}>
+            {deck.cards.map((card, i) => {
+              const isActive = i === activeCardIndex;
+
+              return (
+                <StudyCard
+                  ref={cardRefs[i]}
+                  key={card.id}
+                  className={classnames('mb-4', { active: isActive })}
+                  card={card}
+                  flipped={isActive && activeCardFlipped}
+                  onClick={() => handleCardClick(i)}
+                />
+              );
+            })}
+          </ListContainer>
+        </Scene>
+      </StyledSwipeable>
+    </Container>
+  );
+};
 
 Study.propTypes = {
   deck: PropTypes.object.isRequired,

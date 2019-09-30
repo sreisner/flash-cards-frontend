@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-
 import Meta from './Meta';
 import Notification from './Notification';
 import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
@@ -19,17 +18,13 @@ const Inner = styled.div`
   width: 100%;
 `;
 
-class Page extends Component {
-  render() {
-    return (
-      <StyledPage>
-        <Meta />
-        <Notification />
-        <Inner>{this.props.children}</Inner>
-      </StyledPage>
-    );
-  }
-}
+const Page = ({ children }) => (
+  <StyledPage>
+    <Meta />
+    <Notification />
+    <Inner>{children}</Inner>
+  </StyledPage>
+);
 
 Page.propTypes = {
   children: PropTypes.node.isRequired,

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
+import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
-import { Mutation } from 'react-apollo';
 import Router from 'next/router';
-import User from './User';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -30,78 +30,63 @@ const REQUEST_RESET_MUTATION = gql`
   }
 `;
 
-class ForgotPassword extends Component {
-  state = {
-    email: '',
-  };
+const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
+  const {
+    data: { me },
+  } = useQuery(CURRENT_USER_QUERY);
+  const [requestReset, { error, loading, called }] = useMutation(REQUEST_RESET_MUTATION, {
+    variables: { email },
+  });
 
-  render() {
-    return (
-      <User>
-        {({ data: { me } }) => {
-          if (me) {
-            Router.push('/');
-            return null;
-          }
-
-          return (
-            <Mutation mutation={REQUEST_RESET_MUTATION} variables={this.state}>
-              {(requestReset, { error, loading, called }) => (
-                <StyledPage className="px-2">
-                  <Link href="/login">
-                    <a>
-                      <Logo hasWords className="mb-4" />
-                    </a>
-                  </Link>
-                  <Form
-                    method="post"
-                    onSubmit={async event => {
-                      event.preventDefault();
-                      await requestReset();
-                      this.setState({ email: '' });
-                    }}
-                  >
-                    <fieldset disabled={loading} aria-busy={loading}>
-                      <Error error={error} />
-                      {!error && !loading && called && (
-                        <p>Success! Check your email for a reset link!</p>
-                      )}
-                      <Form.Group>
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          value={this.state.email}
-                          onChange={this.handleChange}
-                        />
-                      </Form.Group>
-
-                      <Button type="submit" className="mb-2">
-                        Request Reset!
-                      </Button>
-                    </fieldset>
-                    <Link href="/">
-                      <a>
-                        <FontAwesomeIcon icon="arrow-left" /> Back to Login
-                      </a>
-                    </Link>
-                  </Form>
-                </StyledPage>
-              )}
-            </Mutation>
-          );
-        }}
-      </User>
-    );
+  if (me) {
+    Router.push('/');
+    return null;
   }
-}
+
+  return (
+    <StyledPage className="px-2">
+      <Link href="/login">
+        <a>
+          <Logo hasWords className="mb-4" />
+        </a>
+      </Link>
+      <Form
+        method="post"
+        onSubmit={async event => {
+          event.preventDefault();
+          await requestReset();
+          setEmail('');
+        }}
+      >
+        <fieldset disabled={loading} aria-busy={loading}>
+          <Error error={error} />
+          {!error && !loading && called && <p>Success! Check your email for a reset link!</p>}
+          <Form.Group>
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              id="email"
+              name="email"
+              required
+              value={email}
+              onChange={event => setEmail(event.target.value)}
+            />
+          </Form.Group>
+
+          <Button type="submit" className="mb-2">
+            Request Reset!
+          </Button>
+        </fieldset>
+        <Link href="/">
+          <a>
+            <FontAwesomeIcon icon="arrow-left" /> Back to Login
+          </a>
+        </Link>
+      </Form>
+    </StyledPage>
+  );
+};
 
 export default ForgotPassword;
