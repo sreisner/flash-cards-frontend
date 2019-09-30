@@ -4,6 +4,7 @@ import User, { CURRENT_USER_QUERY } from './User';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Error from './ErrorMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
@@ -14,9 +15,13 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100vh;
   width: 100%;
   position: relative;
+  overflow-x: hidden;
 `;
 
 const SIGNUP_MUTATION = gql`
@@ -62,9 +67,11 @@ class Signup extends Component {
               refetchQueries={[{ query: CURRENT_USER_QUERY }]}
             >
               {(signup, { error, loading }) => (
-                <StyledPage>
+                <StyledPage className="px-2">
                   <Link href="/login">
-                    <Logo />
+                    <a>
+                      <Logo hasWords className="mb-4" />
+                    </a>
                   </Link>
                   <Form
                     method="post"
@@ -75,7 +82,6 @@ class Signup extends Component {
                     }}
                   >
                     <fieldset disabled={loading} aria-busy={loading}>
-                      <h2>Sign Up</h2>
                       <Error error={error} />
                       <Row>
                         <Col lg={true}>
@@ -130,10 +136,15 @@ class Signup extends Component {
                         />
                       </Form.Group>
 
-                      <Button variant="primary" size="lg" type="submit">
+                      <Button variant="primary" size="lg" type="submit" className="mb-2">
                         Sign Up!
                       </Button>
                     </fieldset>
+                    <Link href="/">
+                      <a>
+                        <FontAwesomeIcon icon="arrow-left" /> Back to Login
+                      </a>
+                    </Link>
                   </Form>
                 </StyledPage>
               )}

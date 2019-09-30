@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Error from './ErrorMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
@@ -12,9 +13,13 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
-  height: 100vh;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  position: relative;
 `;
 
 const REQUEST_RESET_MUTATION = gql`
@@ -48,10 +53,10 @@ class ForgotPassword extends Component {
           return (
             <Mutation mutation={REQUEST_RESET_MUTATION} variables={this.state}>
               {(requestReset, { error, loading, called }) => (
-                <StyledPage>
+                <StyledPage className="px-2">
                   <Link href="/login">
                     <a>
-                      <Logo />
+                      <Logo hasWords className="mb-4" />
                     </a>
                   </Link>
                   <Form
@@ -63,7 +68,6 @@ class ForgotPassword extends Component {
                     }}
                   >
                     <fieldset disabled={loading} aria-busy={loading}>
-                      <h2>Request a password reset</h2>
                       <Error error={error} />
                       {!error && !loading && called && (
                         <p>Success! Check your email for a reset link!</p>
@@ -80,8 +84,15 @@ class ForgotPassword extends Component {
                         />
                       </Form.Group>
 
-                      <Button type="submit">Request Reset!</Button>
+                      <Button type="submit" className="mb-2">
+                        Request Reset!
+                      </Button>
                     </fieldset>
+                    <Link href="/">
+                      <a>
+                        <FontAwesomeIcon icon="arrow-left" /> Back to Login
+                      </a>
+                    </Link>
                   </Form>
                 </StyledPage>
               )}

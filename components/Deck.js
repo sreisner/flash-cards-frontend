@@ -61,16 +61,16 @@ class Deck extends Component {
         <Header breadcrumb={<DeckBreadcrumb name={deck.name} />} />
         <Container className="pt-4">
           <Row className="align-items-center mb-4">
-            <Col>
-              <h1>
+            <Col md={6}>
+              <h2 className="text-center text-md-left mb-3 mb-md-0">
                 {deck.name}{' '}
                 <small>
                   (<Pluralize singular="card" count={deck.cards.length} />)
                 </small>
-              </h1>
+              </h2>
             </Col>
-            <Col>
-              <Actions>
+            <Col md={6}>
+              <Actions className="justify-content-center justify-content-md-end">
                 <CreateCardButton className="mr-2" deckId={deck.id} />
                 {deck.cards.length > 0 && (
                   <Link href={`/study?id=${deck.id}`}>
@@ -88,7 +88,7 @@ class Deck extends Component {
               </Col>
             )}
             {deck.cards.map(card => (
-              <Col lg={4} key={card.id}>
+              <Col sm={6} lg={4} key={card.id}>
                 <FlashCard className="mb-4" card={card} />
               </Col>
             ))}

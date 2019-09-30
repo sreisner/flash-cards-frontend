@@ -14,12 +14,14 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 
 const StyledPage = styled.div`
-  height: 100vh;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 
   .form {
     width: 100%;
@@ -69,8 +71,8 @@ class Login extends Component {
               refetchQueries={[{ query: CURRENT_USER_QUERY }]}
             >
               {(login, { error, loading }) => (
-                <StyledPage>
-                  <Logo className="logo" hasWords />
+                <StyledPage className="px-2">
+                  <Logo hasWords className="mb-4" />
                   <Form
                     className="form"
                     method="post"
@@ -108,7 +110,7 @@ class Login extends Component {
 
                       <Row>
                         <Col lg={true}>
-                          <Button variant="primary" size="lg" type="submit">
+                          <Button variant="primary" size="lg" type="submit" className="mb-2">
                             Sign In!
                           </Button>
                         </Col>

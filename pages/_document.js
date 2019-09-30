@@ -14,10 +14,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html>
-        <Head>
-          {this.props.styleTags}
-          <script src="https://kit.fontawesome.com/10e3e50272.js" />
-        </Head>
+        <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
           <NextScript />

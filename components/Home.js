@@ -18,7 +18,7 @@ import styled from 'styled-components';
 
 const Actions = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 `;
 
 const Home = () => {
@@ -37,13 +37,13 @@ const Home = () => {
           return (
             <Container className="pt-4">
               <Row className="align-items-center mb-4">
-                <Col>
-                  <h1>
+                <Col md={6}>
+                  <h2 className="text-center text-md-left mb-3 mb-md-0">
                     Your Decks (<Pluralize singular="deck" count={me.decks.length} />)
-                  </h1>
+                  </h2>
                 </Col>
-                <Col>
-                  <Actions>
+                <Col md={6}>
+                  <Actions className="justify-content-center justify-content-md-end">
                     <ToggleCreateDeckDialogMutation>
                       {toggleCreateDeckDialog => (
                         <Button variant="primary" onClick={toggleCreateDeckDialog}>
@@ -61,7 +61,7 @@ const Home = () => {
                   </Col>
                 )}
                 {me.decks.map(deck => (
-                  <Col lg={4} key={deck.id} className="mb-4">
+                  <Col sm={6} lg={4} key={deck.id} className="mb-4">
                     <DeckCard deck={deck} />
                   </Col>
                 ))}
