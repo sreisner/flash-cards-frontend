@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OPEN_UPDATE_DECK_DIALOG_MUTATION } from '../lib/withData';
 import PropTypes from 'prop-types';
 import React from 'react';
-import UpdateDeckDialog from './UpdateDeckDialog';
 import { useMutation } from '@apollo/react-hooks';
 
 const UpdateDeckButton = ({ id, className }) => {
@@ -11,7 +10,6 @@ const UpdateDeckButton = ({ id, className }) => {
 
   return (
     <>
-      <UpdateDeckDialog />
       <Button
         variant="secondary"
         className={className}
