@@ -9,10 +9,10 @@ const popover = (
       <strong>Flip</strong>: tap / space
     </Popover.Content>
     <Popover.Content>
-      <strong>Next Card</strong>: swipe up / down arrow
+      <strong>Next Card</strong>: tap next card / down arrow
     </Popover.Content>
     <Popover.Content>
-      <strong>Prev Card</strong>: swipe down / up arrow
+      <strong>Prev Card</strong>: tap previous card / up arrow
     </Popover.Content>
     <Popover.Content>
       <strong>Correct</strong>: swipe right / right arrow

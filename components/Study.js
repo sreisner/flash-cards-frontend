@@ -97,6 +97,18 @@ class Study extends Component {
   listContainerRef = React.createRef();
   cardRefs = [];
 
+  handleCardClick = cardIndex => {
+    const { activeCardIndex } = this.state;
+
+    if (cardIndex === activeCardIndex) {
+      this.flipActiveCard();
+    } else if (cardIndex < activeCardIndex) {
+      this.prevCard();
+    } else {
+      this.nextCard();
+    }
+  };
+
   flipActiveCard = () => {
     this.setState(prevState => ({ activeCardFlipped: !prevState.activeCardFlipped }));
   };
@@ -193,8 +205,6 @@ class Study extends Component {
           activeCardIndex={activeCardIndex}
         />
         <StyledSwipeable
-          onSwipedDown={this.prevCard}
-          onSwipedUp={this.nextCard}
           onSwipedLeft={this.markActiveCardIncorrect}
           onSwipedRight={this.markActiveCardCorrect}
         >
@@ -210,7 +220,7 @@ class Study extends Component {
                     className={classnames('mb-4', { active: isActive })}
                     card={card}
                     flipped={isActive && activeCardFlipped}
-                    onClick={this.flipActiveCard}
+                    onClick={() => this.handleCardClick(i)}
                   />
                 );
               })}
