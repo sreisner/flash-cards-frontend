@@ -10,7 +10,7 @@ const Meta = () => (
     <meta charSet="utf-8" />
     <link rel="shortcut icon" href="/static/favicon.png" />
     <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-    <title>Bright Flash Cards</title>
+    <title>Simple Flash Cards</title>
   </Head>
 );
 

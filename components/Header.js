@@ -26,7 +26,7 @@ const StyledHeader = styled.header`
   background: white;
 
   .logo {
-    width: 100px;
+    width: 50px;
   }
 
   .main {
@@ -34,7 +34,6 @@ const StyledHeader = styled.header`
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid lightgrey;
-    padding: 0 20px;
   }
 
   .secondary {
@@ -53,7 +52,7 @@ class Header extends PureComponent {
     const { breadcrumb, extra } = this.props;
 
     return (
-      <StyledHeader>
+      <StyledHeader className="px-3">
         <div className="main">
           <Link href="/">
             <a>
@@ -63,7 +62,7 @@ class Header extends PureComponent {
           <Nav />
         </div>
         {(breadcrumb || extra) && (
-          <div className="secondary pt-2 px-5">
+          <div className="secondary pt-2">
             <TransparentBreadcrumb>{breadcrumb}</TransparentBreadcrumb>
             {extra}
           </div>

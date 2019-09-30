@@ -5,6 +5,7 @@ import { CURRENT_USER_QUERY } from './User';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
+import styled from 'styled-components';
 
 const SIGNOUT_MUTATION = gql`
   mutation {
@@ -12,6 +13,11 @@ const SIGNOUT_MUTATION = gql`
       message
     }
   }
+`;
+
+const StyledButton = styled(Button)`
+  padding-left: 0;
+  padding-right: 0;
 `;
 
 class Signout extends Component {
@@ -32,14 +38,14 @@ class Signout extends Component {
         ]}
       >
         {(signout, { loading }) => (
-          <Button
+          <StyledButton
             type="button"
             onClick={() => this.handleSignout(signout)}
             disabled={loading}
             variant="link"
           >
             Sign Out
-          </Button>
+          </StyledButton>
         )}
       </Mutation>
     );

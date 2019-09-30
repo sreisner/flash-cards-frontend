@@ -70,7 +70,7 @@ class Login extends Component {
             >
               {(login, { error, loading }) => (
                 <StyledPage>
-                  <Logo className="logo" />
+                  <Logo className="logo" hasWords />
                   <Form
                     className="form"
                     method="post"
