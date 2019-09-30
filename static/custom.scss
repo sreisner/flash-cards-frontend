@@ -1,0 +1,17 @@
+$theme-colors: (
+  'primary': #68c2e8,
+);
+
+// Disable rounded corners
+$enable-rounded: false;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import url('https://use.typekit.net/fee2mdm.css');
+
+body {
+  font-family: proxima-nova, cursive;
+}
+
+.btn-primary {
+  color: white;
+}
