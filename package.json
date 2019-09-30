@@ -50,15 +50,20 @@
     "dotenv": "^8.1.0",
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.1.1",
     "husky": "^3.0.5"
   },
   "eslintConfig": {
+    "plugins": [
+      "react-hooks"
+    ],
     "extends": [
       "eslint:recommended",
       "plugin:react/recommended"
     ],
     "rules": {
-      "react/display-name": "off"
+      "react/display-name": "off",
+      "react-hooks/rules-of-hooks": "error"
     },
     "parser": "babel-eslint",
     "globals": {

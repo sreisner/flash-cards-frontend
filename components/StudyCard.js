@@ -76,11 +76,11 @@ const StyledCard = styled(Card)`
   }
 `;
 
-const StudyCard = React.forwardRef((props, ref) => {
+const StudyCard = props => {
   const { card, className, flipped, onClick } = props;
 
   return (
-    <Container ref={ref} className={className} onClick={onClick}>
+    <Container className={className} onClick={onClick}>
       <CardContainer className={classnames({ flipped })}>
         <StyledCard className="front">
           <Card.Body>
@@ -101,7 +101,7 @@ const StudyCard = React.forwardRef((props, ref) => {
       </CardContainer>
     </Container>
   );
-});
+};
 
 StudyCard.propTypes = {
   card: PropTypes.object.isRequired,

@@ -93,15 +93,12 @@ const Study = ({ deck }) => {
   const [answers, setAnswers] = useState({});
 
   const listContainerRef = useRef(null);
-  let cardRefs = [];
 
   useEffect(() => {
-    const activeCardElement = cardRefs[activeCardIndex].current;
+    const activeCardElement = listContainerRef.current.childNodes[activeCardIndex];
     listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
   }, [activeCardIndex]);
-  useEffect(() => {
-    cardRefs = deck.cards.map(() => useRef(null));
-  }, [deck]);
+
   useEffect(() => {
     document.addEventListener('keydown', event => {
       switch (event.keyCode) {
@@ -159,17 +156,13 @@ const Study = ({ deck }) => {
   };
 
   const prevCard = () => {
-    if (activeCardIndex > 0) {
-      setActiveCardIndex(activeCardIndex => activeCardIndex - 1);
-      setActiveCardFlipped(false);
-    }
+    setActiveCardIndex(prev => (prev > 0 ? prev - 1 : prev));
+    setActiveCardFlipped(false);
   };
 
   const nextCard = () => {
-    if (activeCardIndex < deck.cards.length - 1) {
-      setActiveCardIndex(activeCardIndex => activeCardIndex + 1);
-      setActiveCardFlipped(false);
-    }
+    setActiveCardIndex(prev => (prev < deck.cards.length - 1 ? prev + 1 : prev));
+    setActiveCardFlipped(false);
   };
 
   return (
@@ -188,7 +181,6 @@ const Study = ({ deck }) => {
 
               return (
                 <StudyCard
-                  ref={cardRefs[i]}
                   key={card.id}
                   className={classnames('mb-4', { active: isActive })}
                   card={card}
