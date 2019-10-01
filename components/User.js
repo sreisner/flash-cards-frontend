@@ -7,10 +7,10 @@ const CURRENT_USER_QUERY = gql`
       email
       firstName
       lastName
-      decks {
+      decks(orderBy: createdAt_DESC) {
         id
         name
-        cards {
+        cards(orderBy: createdAt_DESC) {
           id
           front
           back
