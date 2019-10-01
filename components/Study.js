@@ -90,6 +90,8 @@ StudyBreadcrumb.propTypes = {
 const Study = ({ deck }) => {
   const [activeCardFlipped, setActiveCardFlipped] = useState(false);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const activeCardIndexRef = useRef(activeCardIndex);
+  activeCardIndexRef.current = activeCardIndex;
   const [answers, setAnswers] = useState({});
 
   const listContainerRef = useRef(null);
@@ -133,7 +135,7 @@ const Study = ({ deck }) => {
 
   const markActiveCardCorrect = () => {
     const { cards } = deck;
-    const activeCard = cards[activeCardIndex];
+    const activeCard = cards[activeCardIndexRef.current];
 
     setAnswers(answers => ({
       ...answers,
@@ -145,7 +147,7 @@ const Study = ({ deck }) => {
 
   const markActiveCardIncorrect = () => {
     const { cards } = deck;
-    const activeCard = cards[activeCardIndex];
+    const activeCard = cards[activeCardIndexRef.current];
 
     setAnswers(answers => ({
       ...answers,
