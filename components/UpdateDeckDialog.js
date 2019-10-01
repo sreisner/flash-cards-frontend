@@ -37,6 +37,7 @@ const UpdateDeckDialog = () => {
 
   const [updateDeck, { loading, error }] = useMutation(UPDATE_DECK_MUTATION, {
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    variables: { id, name },
   });
   const [closeUpdateDeckDialog] = useMutation(CLOSE_UPDATE_DECK_DIALOG_MUTATION);
 
@@ -46,7 +47,7 @@ const UpdateDeckDialog = () => {
         method="post"
         onSubmit={async event => {
           event.preventDefault();
-          await updateDeck({ variables: { id, name } });
+          await updateDeck();
           setName('');
           closeUpdateDeckDialog();
         }}
