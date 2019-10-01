@@ -23,6 +23,7 @@ const CreateDeckDialog = () => {
   const { data: localState } = useQuery(LOCAL_STATE_QUERY);
   const [toggleCreateDeckDialog] = useMutation(TOGGLE_CREATE_DECK_DIALOG_MUTATION);
   const [createDeck, { error, loading }] = useMutation(CREATE_DECK_MUTATION, {
+    variables: { name },
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
   });
   // TODO: Determine why local state isn't hydrated by the time we
@@ -35,7 +36,7 @@ const CreateDeckDialog = () => {
         method="post"
         onSubmit={async event => {
           event.preventDefault();
-          await createDeck({ variables: { name } });
+          await createDeck();
           setName('');
           toggleCreateDeckDialog();
         }}
