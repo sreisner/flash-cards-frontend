@@ -18,9 +18,9 @@ import UpdateDeckDialog from './UpdateDeckDialog';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
-const HOME_DECKS_QUERY = gql`
+export const HOME_DECKS_QUERY = gql`
   query {
-    decks {
+    decks(orderBy: createdAt_DESC) {
       id
       name
       cards {

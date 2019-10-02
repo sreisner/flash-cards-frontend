@@ -1,8 +1,8 @@
 import { OPEN_UPDATE_DECK_DIALOG_MUTATION, SHOW_NOTIFICATION_MUTATION } from '../lib/withData';
 
-import { CURRENT_USER_QUERY } from './User';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { HOME_DECKS_QUERY } from './Home';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Router from 'next/router';
@@ -31,7 +31,7 @@ const DeckCardActions = ({ id, onLoading, onComplete }) => {
   const [showNotification] = useMutation(SHOW_NOTIFICATION_MUTATION);
   const [deleteDeck, { loading }] = useMutation(DELETE_DECK_MUTATION, {
     variables: { id },
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    refetchQueries: [{ query: HOME_DECKS_QUERY }],
     awaitRefetchQueries: true,
   });
 

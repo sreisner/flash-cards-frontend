@@ -1,14 +1,14 @@
-import { CLOSE_UPDATE_CARD_DIALOG_MUTATION, LOCAL_STATE_QUERY } from '../lib/withData';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
-import { CURRENT_USER_QUERY } from './User';
+import { CLOSE_UPDATE_CARD_DIALOG_MUTATION } from '../lib/withData';
+import { DECK_QUERY } from './Deck';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 
 const UPDATE_CARD_MUTATION = gql`
   mutation UPDATE_CARD_MUTATION($id: ID!, $front: String!, $back: String!) {
@@ -18,33 +18,18 @@ const UPDATE_CARD_MUTATION = gql`
   }
 `;
 
-const UpdateDeckDialog = () => {
+const UpdateDeckDialog = ({ isOpen, card }) => {
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
-
-  const {
-    data: {
-      updateCardDialog: { id, isOpen },
-    },
-  } = useQuery(LOCAL_STATE_QUERY);
-
-  const {
-    data: { me },
-  } = useQuery(CURRENT_USER_QUERY);
-
   useEffect(() => {
-    if (id) {
-      const card = me.decks
-        .reduce((acc, curr) => acc.concat(curr.cards), [])
-        .find(card => card.id === id);
-
-      setFront(card.front);
-      setBack(card.back);
-    }
-  }, [id]);
+    setFront(card.front || '');
+    setBack(card.back || '');
+  }, [card]);
 
   const [updateCard, { loading, error }] = useMutation(UPDATE_CARD_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: card.deck && card.deck.id } }],
+
+    variables: { id: card.id, front, back },
   });
   const [closeUpdateCardDialog] = useMutation(CLOSE_UPDATE_CARD_DIALOG_MUTATION);
 
@@ -54,9 +39,7 @@ const UpdateDeckDialog = () => {
         method="post"
         onSubmit={async event => {
           event.preventDefault();
-          await updateCard({ variables: { id, front, back } });
-          setFront('');
-          setBack('');
+          await updateCard();
           closeUpdateCardDialog();
         }}
       >
@@ -106,8 +89,14 @@ const UpdateDeckDialog = () => {
 };
 
 UpdateDeckDialog.propTypes = {
-  client: PropTypes.shape({
-    query: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  card: PropTypes.shape({
+    id: PropTypes.string,
+    front: PropTypes.string,
+    back: PropTypes.string,
+    deck: PropTypes.shape({
+      id: PropTypes.string,
+    }),
   }),
 };
 

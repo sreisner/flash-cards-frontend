@@ -1,6 +1,6 @@
 import { OPEN_UPDATE_CARD_DIALOG_MUTATION, SHOW_NOTIFICATION_MUTATION } from '../lib/withData';
 
-import { CURRENT_USER_QUERY } from './User';
+import { DECK_QUERY } from './Deck';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
@@ -23,14 +23,14 @@ const DELETE_CARD_MUTATION = gql`
   }
 `;
 
-const FlashCardActions = ({ id, onLoading, onComplete }) => {
+const FlashCardActions = ({ card, onLoading, onComplete }) => {
   const [openUpdateCardDialog] = useMutation(OPEN_UPDATE_CARD_DIALOG_MUTATION, {
-    variables: { id },
+    variables: { id: card.id },
   });
   const [showNotification] = useMutation(SHOW_NOTIFICATION_MUTATION);
   const [deleteCard, { loading }] = useMutation(DELETE_CARD_MUTATION, {
-    variables: { id },
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    variables: { id: card.id },
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: card.deck.id } }],
     awaitRefetchQueries: true,
   });
 
@@ -71,7 +71,12 @@ const FlashCardActions = ({ id, onLoading, onComplete }) => {
 };
 
 FlashCardActions.propTypes = {
-  id: PropTypes.string.isRequired,
+  card: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    deck: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
   onLoading: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
 };

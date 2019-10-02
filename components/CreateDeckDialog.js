@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
-import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
+import { HOME_DECKS_QUERY } from './Home';
 import Modal from 'react-bootstrap/Modal';
 import gql from 'graphql-tag';
 
@@ -24,7 +24,7 @@ const CreateDeckDialog = () => {
   const [toggleCreateDeckDialog] = useMutation(TOGGLE_CREATE_DECK_DIALOG_MUTATION);
   const [createDeck, { error, loading }] = useMutation(CREATE_DECK_MUTATION, {
     variables: { name },
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    refetchQueries: [{ query: HOME_DECKS_QUERY }],
   });
   // TODO: Determine why local state isn't hydrated by the time we
   // reach this point

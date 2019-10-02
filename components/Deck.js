@@ -1,3 +1,4 @@
+import AppLoading from './AppLoading';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -6,6 +7,7 @@ import CreateCardButton from './CreateCardButton';
 import CreateCardDialog from './CreateCardDialog';
 import FlashCard from './FlashCard';
 import Header from './Header';
+import { LOCAL_STATE_QUERY } from '../lib/withData';
 import Link from 'next/link';
 import Masonry from 'react-masonry-component';
 import NoFlashCardsCard from './NoFlashCardsCard';
@@ -15,7 +17,26 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import UpdateCardDialog from './UpdateCardDialog';
+import gql from 'graphql-tag';
 import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
+
+export const DECK_QUERY = gql`
+  query deck($id: ID!) {
+    deck(id: $id) {
+      id
+      name
+      cards(orderBy: createdAt_DESC) {
+        id
+        front
+        back
+        deck {
+          id
+        }
+      }
+    }
+  }
+`;
 
 const Actions = styled.div`
   display: flex;
@@ -43,11 +64,23 @@ DeckBreadcrumb.propTypes = {
   name: PropTypes.string.isRequired,
 };
 
-const Deck = ({ deck }) => {
+const Deck = ({ id }) => {
+  const { data, loading } = useQuery(DECK_QUERY, { variables: { id } });
+  const {
+    data: {
+      updateCardDialog: { isOpen, id: updateCardId },
+    },
+  } = useQuery(LOCAL_STATE_QUERY);
+
+  if (loading) return <AppLoading />;
+
+  const { deck } = data;
+  const cardBeingUpdated = deck.cards.find(card => card.id === updateCardId) || {};
+
   return (
     <>
       <CreateCardDialog />
-      <UpdateCardDialog />
+      <UpdateCardDialog isOpen={isOpen} card={cardBeingUpdated} />
       <Header breadcrumb={<DeckBreadcrumb name={deck.name} />} />
       <Container className="pt-4">
         <Row className="align-items-center mb-4">
@@ -89,11 +122,7 @@ const Deck = ({ deck }) => {
 };
 
 Deck.propTypes = {
-  deck: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    cards: PropTypes.array.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default Deck;

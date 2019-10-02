@@ -42,7 +42,7 @@ const FlashCard = ({ card, className }) => {
         <Card.Text>{card.back}</Card.Text>
       </Card.Body>
       <FlashCardActions
-        id={card.id}
+        card={card}
         onLoading={() => setDisabled(true)}
         onComplete={() => setDisabled(false)}
       />
