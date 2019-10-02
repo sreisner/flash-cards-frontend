@@ -1,14 +1,22 @@
-import { CLOSE_UPDATE_DECK_DIALOG_MUTATION, LOCAL_STATE_QUERY } from '../lib/withData';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
-import { CURRENT_USER_QUERY } from './User';
+import { CLOSE_UPDATE_DECK_DIALOG_MUTATION } from '../lib/withData';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
+
+const DECK_QUERY = gql`
+  query deck($id: ID!) {
+    deck(id: $id) {
+      id
+      name
+    }
+  }
+`;
 
 const UPDATE_DECK_MUTATION = gql`
   mutation UPDATE_DECK_MUTATION($id: ID!, $name: String!) {
@@ -18,26 +26,15 @@ const UPDATE_DECK_MUTATION = gql`
   }
 `;
 
-const UpdateDeckDialog = () => {
-  const [name, setName] = useState('');
-  const {
-    data: {
-      updateDeckDialog: { id, isOpen },
-    },
-  } = useQuery(LOCAL_STATE_QUERY);
-  const {
-    data: { me },
-  } = useQuery(CURRENT_USER_QUERY);
+const UpdateDeckDialog = ({ isOpen, deck }) => {
+  const [name, setName] = useState();
   useEffect(() => {
-    if (id) {
-      const deck = me.decks.find(deck => deck.id === id);
-      setName(deck.name);
-    }
-  }, [id]);
+    setName(deck.name || '');
+  }, [deck]);
 
   const [updateDeck, { loading, error }] = useMutation(UPDATE_DECK_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
-    variables: { id, name },
+    variables: { id: deck.id, name },
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: deck.id } }],
   });
   const [closeUpdateDeckDialog] = useMutation(CLOSE_UPDATE_DECK_DIALOG_MUTATION);
 
@@ -62,8 +59,6 @@ const UpdateDeckDialog = () => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                id="name"
-                name="name"
                 required
                 value={name}
                 onChange={event => setName(event.target.value)}
@@ -85,9 +80,11 @@ const UpdateDeckDialog = () => {
 };
 
 UpdateDeckDialog.propTypes = {
-  client: PropTypes.shape({
-    query: PropTypes.func.isRequired,
-  }),
+  isOpen: PropTypes.bool.isRequired,
+  deck: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
 };
 
 export default UpdateDeckDialog;
