@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
+import PasswordInput from './PasswordInput';
 import Router from 'next/router';
 import Row from 'react-bootstrap/Row';
 import gql from 'graphql-tag';
@@ -119,17 +120,12 @@ const Signup = () => {
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              id="password"
-              name="password"
-              required
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </Form.Group>
+          <PasswordInput
+            label="Password"
+            required
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+          />
 
           <Button variant="primary" size="lg" type="submit" className="mb-2">
             Sign Up!

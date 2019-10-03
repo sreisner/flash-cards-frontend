@@ -8,6 +8,7 @@ import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Link from 'next/link';
 import Logo from './Logo';
+import PasswordInput from './PasswordInput';
 import Router from 'next/router';
 import Row from 'react-bootstrap/Row';
 import gql from 'graphql-tag';
@@ -78,25 +79,18 @@ const Login = () => {
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
-              id="email"
-              name="email"
               required
               value={email}
               onChange={event => setEmail(event.target.value)}
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              id="password"
-              name="password"
-              required
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </Form.Group>
+          <PasswordInput
+            label="Password"
+            required
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+          />
 
           <Row>
             <Col lg={true}>
