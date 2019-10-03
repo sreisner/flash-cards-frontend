@@ -1,20 +1,35 @@
-import { CURRENT_USER_QUERY } from '../components/User';
+import AppLoading from '../components/AppLoading';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Study from '../components/Study';
+import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 
-const StudyPage = ({ query }) => {
-  const {
-    data: { me },
-  } = useQuery(CURRENT_USER_QUERY);
+const DECK_QUERY = gql`
+  query deck($id: ID!) {
+    deck(id: $id) {
+      id
+      name
+      cards {
+        id
+        front
+        back
+        deck {
+          id
+        }
+      }
+    }
+  }
+`;
 
-  const deck = me.decks.find(deck => deck.id === query.id);
-  if (!deck) {
-    return <h2>You do not have access to this deck or it does not exist.</h2>;
+const StudyPage = ({ query }) => {
+  const { data, loading } = useQuery(DECK_QUERY, { variables: { id: query.id } });
+
+  if (loading) {
+    return <AppLoading />;
   }
 
-  return <Study deck={deck} />;
+  return <Study deck={data.deck} />;
 };
 
 StudyPage.propTypes = {

@@ -94,12 +94,48 @@ const Study = ({ deck }) => {
   activeCardIndexRef.current = activeCardIndex;
   const [answers, setAnswers] = useState({});
 
+  const prevCard = () => {
+    setActiveCardIndex(prev => (prev > 0 ? prev - 1 : prev));
+    setActiveCardFlipped(false);
+  };
+
+  const nextCard = () => {
+    setActiveCardIndex(prev => (prev < deck.cards.length - 1 ? prev + 1 : prev));
+    setActiveCardFlipped(false);
+  };
+
+  const markActiveCardCorrect = () => {
+    const { cards } = deck;
+    const activeCard = cards[activeCardIndexRef.current];
+
+    setAnswers(answers => ({
+      ...answers,
+      [activeCard.id]: true,
+    }));
+
+    nextCard();
+  };
+
+  const markActiveCardIncorrect = () => {
+    const { cards } = deck;
+    const activeCard = cards[activeCardIndexRef.current];
+
+    setAnswers(answers => ({
+      ...answers,
+      [activeCard.id]: false,
+    }));
+
+    nextCard();
+  };
+
   const listContainerRef = useRef(null);
 
   useEffect(() => {
-    const activeCardElement = listContainerRef.current.childNodes[activeCardIndex];
-    listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
-  }, [activeCardIndex]);
+    if (listContainerRef.current) {
+      const activeCardElement = listContainerRef.current.childNodes[activeCardIndex];
+      listContainerRef.current.style.top = `${-activeCardElement.offsetTop}px`;
+    }
+  }, [activeCardIndex, listContainerRef]);
 
   useEffect(() => {
     document.addEventListener('keydown', event => {
@@ -131,40 +167,6 @@ const Study = ({ deck }) => {
     } else {
       nextCard();
     }
-  };
-
-  const markActiveCardCorrect = () => {
-    const { cards } = deck;
-    const activeCard = cards[activeCardIndexRef.current];
-
-    setAnswers(answers => ({
-      ...answers,
-      [activeCard.id]: true,
-    }));
-
-    nextCard();
-  };
-
-  const markActiveCardIncorrect = () => {
-    const { cards } = deck;
-    const activeCard = cards[activeCardIndexRef.current];
-
-    setAnswers(answers => ({
-      ...answers,
-      [activeCard.id]: false,
-    }));
-
-    nextCard();
-  };
-
-  const prevCard = () => {
-    setActiveCardIndex(prev => (prev > 0 ? prev - 1 : prev));
-    setActiveCardFlipped(false);
-  };
-
-  const nextCard = () => {
-    setActiveCardIndex(prev => (prev < deck.cards.length - 1 ? prev + 1 : prev));
-    setActiveCardFlipped(false);
   };
 
   return (
@@ -199,7 +201,15 @@ const Study = ({ deck }) => {
 };
 
 Study.propTypes = {
-  deck: PropTypes.object.isRequired,
+  deck: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    cards: PropTypes.arrayOf({
+      id: PropTypes.string.isRequired,
+      front: PropTypes.string.isRequired,
+      back: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
 };
 
 export default Study;
