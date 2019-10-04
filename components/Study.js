@@ -204,11 +204,13 @@ Study.propTypes = {
   deck: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    cards: PropTypes.arrayOf({
-      id: PropTypes.string.isRequired,
-      front: PropTypes.string.isRequired,
-      back: PropTypes.string.isRequired,
-    }),
+    cards: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        front: PropTypes.string.isRequired,
+        back: PropTypes.string.isRequired,
+      })
+    ),
   }).isRequired,
 };
 
