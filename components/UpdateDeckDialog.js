@@ -22,6 +22,7 @@ const UPDATE_DECK_MUTATION = gql`
   mutation UPDATE_DECK_MUTATION($id: ID!, $name: String!) {
     updateDeck(id: $id, name: $name) {
       id
+      name
     }
   }
 `;
@@ -35,6 +36,14 @@ const UpdateDeckDialog = ({ isOpen, deck }) => {
   const [updateDeck, { loading, error }] = useMutation(UPDATE_DECK_MUTATION, {
     variables: { id: deck.id, name },
     refetchQueries: [{ query: DECK_QUERY, variables: { id: deck.id } }],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      updateDeck: {
+        id: deck.id,
+        name,
+        __typename: 'Deck',
+      },
+    },
   });
   const [closeUpdateDeckDialog] = useMutation(CLOSE_UPDATE_DECK_DIALOG_MUTATION);
 
@@ -42,11 +51,11 @@ const UpdateDeckDialog = ({ isOpen, deck }) => {
     <Modal show={isOpen} onHide={closeUpdateDeckDialog}>
       <Form
         method="post"
-        onSubmit={async event => {
+        onSubmit={event => {
           event.preventDefault();
-          await updateDeck();
           setName('');
           closeUpdateDeckDialog();
+          updateDeck();
         }}
       >
         <Modal.Header closeButton>
