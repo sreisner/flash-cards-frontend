@@ -26,7 +26,9 @@ const CreateDeckDialog = () => {
   const [name, setName] = useState('');
 
   const {
-    data: { isCreateDeckDialogOpen },
+    data: {
+      createDeckDialog: { isOpen },
+    },
   } = useQuery(LOCAL_STATE_QUERY);
   const [toggleCreateDeckDialog] = useMutation(TOGGLE_CREATE_DECK_DIALOG_MUTATION);
   const [createDeck, { loading }] = useMutation(CREATE_DECK_MUTATION, {
@@ -54,7 +56,7 @@ const CreateDeckDialog = () => {
   });
 
   return (
-    <Modal show={isCreateDeckDialogOpen} onHide={toggleCreateDeckDialog}>
+    <Modal show={isOpen} onHide={toggleCreateDeckDialog}>
       <Form
         method="post"
         onSubmit={event => {
