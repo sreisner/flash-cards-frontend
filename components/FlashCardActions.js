@@ -23,14 +23,14 @@ const DELETE_CARD_MUTATION = gql`
   }
 `;
 
-const FlashCardActions = ({ card, onLoading, onComplete }) => {
+const FlashCardActions = ({ card, deckId, onLoading, onComplete }) => {
   const [openUpdateCardDialog] = useMutation(OPEN_UPDATE_CARD_DIALOG_MUTATION, {
     variables: { id: card.id },
   });
   const [showNotification] = useMutation(SHOW_NOTIFICATION_MUTATION);
   const [deleteCard, { loading }] = useMutation(DELETE_CARD_MUTATION, {
     variables: { id: card.id },
-    refetchQueries: [{ query: DECK_QUERY, variables: { id: card.deck.id } }],
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: deckId } }],
     awaitRefetchQueries: true,
   });
 
@@ -73,10 +73,8 @@ const FlashCardActions = ({ card, onLoading, onComplete }) => {
 FlashCardActions.propTypes = {
   card: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    deck: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
   }).isRequired,
+  deckId: PropTypes.string.isRequired,
   onLoading: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
 };

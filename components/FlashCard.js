@@ -30,7 +30,7 @@ const DisabledOverlay = styled.div`
   z-index: 1;
 `;
 
-const FlashCard = ({ card, className }) => {
+const FlashCard = ({ card, deckId, className }) => {
   const [disabled, setDisabled] = useState(false);
 
   return (
@@ -43,6 +43,7 @@ const FlashCard = ({ card, className }) => {
       </Card.Body>
       <FlashCardActions
         card={card}
+        deckId={deckId}
         onLoading={() => setDisabled(true)}
         onComplete={() => setDisabled(false)}
       />
@@ -56,6 +57,7 @@ FlashCard.propTypes = {
     front: PropTypes.string.isRequired,
     back: PropTypes.string.isRequired,
   }).isRequired,
+  deckId: PropTypes.string.isRequired,
   className: PropTypes.string,
 };
 

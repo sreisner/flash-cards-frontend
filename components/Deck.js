@@ -30,9 +30,6 @@ export const DECK_QUERY = gql`
         id
         front
         back
-        deck {
-          id
-        }
       }
     }
   }
@@ -112,7 +109,7 @@ const Deck = ({ id }) => {
           )}
           {deck.cards.map(card => (
             <Col sm={6} lg={4} key={card.id}>
-              <FlashCard className="mb-4" card={card} />
+              <FlashCard className="mb-4" deckId={id} card={card} />
             </Col>
           ))}
         </Masonry>

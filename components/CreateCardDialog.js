@@ -3,42 +3,71 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
-import { CURRENT_USER_QUERY } from './User';
+import { DECK_QUERY } from './Deck';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import cuid from 'cuid';
 import gql from 'graphql-tag';
 
 const CREATE_CARD_MUTATION = gql`
-  mutation CREATE_CARD_MUTATION($front: String!, $back: String!, $deckId: ID!) {
-    createCard(front: $front, back: $back, deckId: $deckId) {
+  mutation CREATE_CARD_MUTATION($id: ID!, $front: String!, $back: String!, $deckId: ID!) {
+    createCard(id: $id, front: $front, back: $back, deckId: $deckId) {
       id
+      front
+      back
     }
   }
 `;
 
 const CreateCardDialog = () => {
+  const id = cuid();
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
 
-  const { data: localState } = useQuery(LOCAL_STATE_QUERY);
+  const {
+    data: {
+      createCardDialog: { isOpen, deckId },
+    },
+  } = useQuery(LOCAL_STATE_QUERY);
   const [closeCreateCardDialog] = useMutation(CLOSE_CREATE_CARD_DIALOG_MUTATION);
   const [createCard, { error, loading }] = useMutation(CREATE_CARD_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    variables: { id, front, back, deckId },
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: deckId } }],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      createCard: {
+        __typename: 'Card',
+        id,
+        front,
+        back,
+      },
+    },
+    update: (proxy, { data: { createCard } }) => {
+      const data = proxy.readQuery({ query: DECK_QUERY, variables: { id: deckId } });
+
+      proxy.writeQuery({
+        query: DECK_QUERY,
+        data: {
+          deck: {
+            ...data.deck,
+            cards: [createCard, ...data.deck.cards],
+          },
+        },
+      });
+    },
   });
-  // TODO: Determine why local state isn't hydrated at this point
-  const { isOpen, deckId } = (localState && localState.createCardDialog) || {};
 
   return (
     <Modal show={isOpen} onHide={closeCreateCardDialog}>
       <Form
         method="post"
-        onSubmit={async event => {
+        onSubmit={event => {
           event.preventDefault();
-          await createCard({ variables: { front, back, deckId } });
           setFront('');
           setBack('');
           closeCreateCardDialog();
+          createCard();
         }}
       >
         <Modal.Header closeButton>

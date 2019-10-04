@@ -6,10 +6,9 @@ import Toast from 'react-bootstrap/Toast';
 
 const Notification = () => {
   const [hideNotification] = useMutation(HIDE_NOTIFICATION_MUTATION);
-  const { data: localState } = useQuery(LOCAL_STATE_QUERY);
-  // TODO: Figure out why local cache isn't populated by the time we
-  // reach this point
-  const { notification } = localState || {};
+  const {
+    data: { notification },
+  } = useQuery(LOCAL_STATE_QUERY);
   const { isVisible, headerText, bodyText } = notification || {};
 
   return (

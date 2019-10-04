@@ -53,7 +53,6 @@ const UpdateDeckDialog = ({ isOpen, deck }) => {
         method="post"
         onSubmit={event => {
           event.preventDefault();
-          setName('');
           closeUpdateDeckDialog();
           updateDeck();
         }}

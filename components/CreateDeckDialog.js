@@ -3,50 +3,72 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Button from 'react-bootstrap/Button';
-import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
 import { HOME_DECKS_QUERY } from './Home';
 import Modal from 'react-bootstrap/Modal';
+import cuid from 'cuid';
 import gql from 'graphql-tag';
 
 const CREATE_DECK_MUTATION = gql`
-  mutation CREATE_DECK_MUTATION($name: String!) {
-    createDeck(name: $name) {
+  mutation CREATE_DECK_MUTATION($id: ID!, $name: String!) {
+    createDeck(id: $id, name: $name) {
       id
+      name
+      cards {
+        id
+      }
     }
   }
 `;
 
 const CreateDeckDialog = () => {
+  const id = cuid();
   const [name, setName] = useState('');
 
-  const { data: localState } = useQuery(LOCAL_STATE_QUERY);
+  const {
+    data: { isCreateDeckDialogOpen },
+  } = useQuery(LOCAL_STATE_QUERY);
   const [toggleCreateDeckDialog] = useMutation(TOGGLE_CREATE_DECK_DIALOG_MUTATION);
-  const [createDeck, { error, loading }] = useMutation(CREATE_DECK_MUTATION, {
-    variables: { name },
+  const [createDeck, { loading }] = useMutation(CREATE_DECK_MUTATION, {
+    variables: { id, name },
     refetchQueries: [{ query: HOME_DECKS_QUERY }],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      createDeck: {
+        __typename: 'Deck',
+        id,
+        name,
+        cards: [],
+      },
+    },
+    update: (proxy, { data: { createDeck } }) => {
+      const data = proxy.readQuery({ query: HOME_DECKS_QUERY });
+
+      proxy.writeQuery({
+        query: HOME_DECKS_QUERY,
+        data: {
+          decks: [createDeck, ...data.decks],
+        },
+      });
+    },
   });
-  // TODO: Determine why local state isn't hydrated by the time we
-  // reach this point
-  const { isCreateDeckDialogOpen } = localState || {};
 
   return (
     <Modal show={isCreateDeckDialogOpen} onHide={toggleCreateDeckDialog}>
       <Form
         method="post"
-        onSubmit={async event => {
+        onSubmit={event => {
           event.preventDefault();
-          await createDeck();
           setName('');
           toggleCreateDeckDialog();
+          createDeck();
         }}
       >
         <Modal.Header closeButton>
           <Modal.Title>Create a Deck</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <fieldset disabled={loading} aria-busy={loading}>
-            <Error error={error} />
+          <fieldset>
             <Form.Group>
               <Form.Label>Name</Form.Label>
               <Form.Control
