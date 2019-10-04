@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { DECK_QUERY } from './Deck';
 import Error from './ErrorMessage';
 import Form from 'react-bootstrap/Form';
+import { HOME_DECKS_QUERY } from './Home';
 import Modal from 'react-bootstrap/Modal';
 import cuid from 'cuid';
 import gql from 'graphql-tag';
@@ -33,7 +34,7 @@ const CreateCardDialog = () => {
   const [closeCreateCardDialog] = useMutation(CLOSE_CREATE_CARD_DIALOG_MUTATION);
   const [createCard, { error, loading }] = useMutation(CREATE_CARD_MUTATION, {
     variables: { id, front, back, deckId },
-    refetchQueries: [{ query: DECK_QUERY, variables: { id: deckId } }],
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: deckId } }, { query: HOME_DECKS_QUERY }],
     optimisticResponse: {
       __typename: 'Mutation',
       createCard: {
