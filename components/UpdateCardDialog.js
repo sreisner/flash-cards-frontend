@@ -14,6 +14,8 @@ const UPDATE_CARD_MUTATION = gql`
   mutation UPDATE_CARD_MUTATION($id: ID!, $front: String!, $back: String!) {
     updateCard(id: $id, front: $front, back: $back) {
       id
+      front
+      back
     }
   }
 `;
@@ -27,9 +29,17 @@ const UpdateDeckDialog = ({ isOpen, card }) => {
   }, [card]);
 
   const [updateCard, { loading, error }] = useMutation(UPDATE_CARD_MUTATION, {
-    refetchQueries: [{ query: DECK_QUERY, variables: { id: card.deck && card.deck.id } }],
-
     variables: { id: card.id, front, back },
+    refetchQueries: [{ query: DECK_QUERY, variables: { id: card.deck && card.deck.id } }],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      updateCard: {
+        id: card.id,
+        front,
+        back,
+        __typename: 'Card',
+      },
+    },
   });
   const [closeUpdateCardDialog] = useMutation(CLOSE_UPDATE_CARD_DIALOG_MUTATION);
 
@@ -37,10 +47,10 @@ const UpdateDeckDialog = ({ isOpen, card }) => {
     <Modal show={isOpen} onHide={closeUpdateCardDialog}>
       <Form
         method="post"
-        onSubmit={async event => {
+        onSubmit={event => {
           event.preventDefault();
-          await updateCard();
           closeUpdateCardDialog();
+          updateCard();
         }}
       >
         <Modal.Header closeButton>
