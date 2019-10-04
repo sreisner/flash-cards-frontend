@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-
 import Card from 'react-bootstrap/Card';
 import DeckCardActions from './DeckCardActions';
 import Link from 'next/link';
 import NoStyleAnchor from './styles/NoStyleAnchor';
 import Pluralize from 'react-pluralize';
 import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
@@ -27,23 +26,9 @@ const StyledCard = styled(Card)`
   }
 `;
 
-const DisabledOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--light);
-  opacity: 0.5;
-  z-index: 1;
-`;
-
 const DeckCard = ({ deck }) => {
-  const [disabled, setDisabled] = useState(false);
-
   return (
     <StyledCard>
-      {disabled && <DisabledOverlay />}
       <Link href={`/deck?id=${deck.id}`}>
         <NoStyleAnchor>
           <Card.Body>
@@ -54,11 +39,7 @@ const DeckCard = ({ deck }) => {
           </Card.Body>
         </NoStyleAnchor>
       </Link>
-      <DeckCardActions
-        id={deck.id}
-        onLoading={() => setDisabled(true)}
-        onComplete={() => setDisabled(false)}
-      />
+      <DeckCardActions id={deck.id} />
     </StyledCard>
   );
 };

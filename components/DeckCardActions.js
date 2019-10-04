@@ -24,7 +24,7 @@ const DELETE_DECK_MUTATION = gql`
   }
 `;
 
-const DeckCardActions = ({ id, onLoading, onComplete }) => {
+const DeckCardActions = ({ id }) => {
   const [openUpdateDeckDialog] = useMutation(OPEN_UPDATE_DECK_DIALOG_MUTATION, {
     variables: { id },
   });
@@ -32,12 +32,26 @@ const DeckCardActions = ({ id, onLoading, onComplete }) => {
   const [deleteDeck, { loading }] = useMutation(DELETE_DECK_MUTATION, {
     variables: { id },
     refetchQueries: [{ query: HOME_DECKS_QUERY }],
-    awaitRefetchQueries: true,
+    optimisticResponse: {
+      deleteDeck: {
+        __typename: 'SuccessMessage',
+        message: '',
+      },
+    },
+    update: proxy => {
+      const data = proxy.readQuery({ query: HOME_DECKS_QUERY });
+
+      proxy.writeQuery({
+        query: HOME_DECKS_QUERY,
+        data: {
+          decks: [...data.decks.filter(deck => deck.id !== id)],
+        },
+      });
+    },
   });
 
   const handleDeleteDeck = async () => {
     try {
-      onLoading();
       await deleteDeck();
     } catch (error) {
       showNotification({
@@ -46,8 +60,6 @@ const DeckCardActions = ({ id, onLoading, onComplete }) => {
           bodyText: `We couldn't delete the deck.`,
         },
       });
-    } finally {
-      onComplete();
     }
   };
 
@@ -77,8 +89,6 @@ const DeckCardActions = ({ id, onLoading, onComplete }) => {
 
 DeckCardActions.propTypes = {
   id: PropTypes.string.isRequired,
-  onLoading: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
 };
 
 export default DeckCardActions;
