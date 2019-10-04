@@ -23,7 +23,7 @@ const DELETE_CARD_MUTATION = gql`
   }
 `;
 
-const FlashCardActions = ({ card, deckId, onLoading, onComplete }) => {
+const FlashCardActions = ({ card, deckId }) => {
   const [openUpdateCardDialog] = useMutation(OPEN_UPDATE_CARD_DIALOG_MUTATION, {
     variables: { id: card.id },
   });
@@ -31,12 +31,31 @@ const FlashCardActions = ({ card, deckId, onLoading, onComplete }) => {
   const [deleteCard, { loading }] = useMutation(DELETE_CARD_MUTATION, {
     variables: { id: card.id },
     refetchQueries: [{ query: DECK_QUERY, variables: { id: deckId } }],
-    awaitRefetchQueries: true,
+    optimisticResponse: {
+      __typename: 'Mutation',
+      deleteCard: {
+        __typename: 'SuccessMessage',
+        message: '',
+      },
+    },
+    update: proxy => {
+      const data = proxy.readQuery({ query: DECK_QUERY, variables: { id: deckId } });
+
+      proxy.writeQuery({
+        query: DECK_QUERY,
+        variables: { id: deckId },
+        data: {
+          deck: {
+            ...data.deck,
+            cards: data.deck.cards.filter(current => current.id !== card.id),
+          },
+        },
+      });
+    },
   });
 
   const handleDeleteCard = async () => {
     try {
-      onLoading();
       await deleteCard();
     } catch (error) {
       showNotification({
@@ -45,8 +64,6 @@ const FlashCardActions = ({ card, deckId, onLoading, onComplete }) => {
           bodyText: `We couldn't delete the card.`,
         },
       });
-    } finally {
-      onComplete();
     }
   };
 
@@ -75,8 +92,6 @@ FlashCardActions.propTypes = {
     id: PropTypes.string.isRequired,
   }).isRequired,
   deckId: PropTypes.string.isRequired,
-  onLoading: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
 };
 
 export default FlashCardActions;

@@ -44,7 +44,7 @@ const DeckCardActions = ({ id }) => {
       proxy.writeQuery({
         query: HOME_DECKS_QUERY,
         data: {
-          decks: [...data.decks.filter(deck => deck.id !== id)],
+          decks: data.decks.filter(deck => deck.id !== id),
         },
       });
     },

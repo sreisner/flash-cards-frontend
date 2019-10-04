@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-
 import Card from 'react-bootstrap/Card';
 import FlashCardActions from './FlashCardActions';
 import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
@@ -19,34 +18,15 @@ const StyledCard = styled(Card)`
   }
 `;
 
-const DisabledOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--light);
-  opacity: 0.5;
-  z-index: 1;
-`;
-
 const FlashCard = ({ card, deckId, className }) => {
-  const [disabled, setDisabled] = useState(false);
-
   return (
     <StyledCard className={className}>
-      {disabled && <DisabledOverlay />}
       <Card.Body>
         <Card.Subtitle>{card.front}</Card.Subtitle>
         <hr />
         <Card.Text>{card.back}</Card.Text>
       </Card.Body>
-      <FlashCardActions
-        card={card}
-        deckId={deckId}
-        onLoading={() => setDisabled(true)}
-        onComplete={() => setDisabled(false)}
-      />
+      <FlashCardActions card={card} deckId={deckId} />
     </StyledCard>
   );
 };
