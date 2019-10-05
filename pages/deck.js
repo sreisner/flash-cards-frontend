@@ -1,9 +1,14 @@
 import Deck from '../components/Deck';
+import PleaseSignIn from '../components/PleaseSignIn';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 const DeckPage = ({ query }) => {
-  return <Deck id={query.id} />;
+  return (
+    <PleaseSignIn>
+      <Deck id={query.id} />
+    </PleaseSignIn>
+  );
 };
 
 DeckPage.propTypes = {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import AppLoading from './AppLoading';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Header from './Header';
 import Link from 'next/link';
@@ -10,13 +11,32 @@ import StudyProgressIndicator from './StudyProgressIndicator';
 import { Swipeable } from 'react-swipeable';
 import TransparentBreadcrumb from './styles/TransparentBreadcrumb';
 import classnames from 'classnames';
+import gql from 'graphql-tag';
 import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
 
 const SPACE_KEY = 32;
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 const LEFT_KEY = 37;
 const RIGHT_KEY = 39;
+
+const DECK_QUERY = gql`
+  query deck($id: ID!) {
+    deck(id: $id) {
+      id
+      name
+      cards {
+        id
+        front
+        back
+        deck {
+          id
+        }
+      }
+    }
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -87,7 +107,7 @@ StudyBreadcrumb.propTypes = {
   }),
 };
 
-const Study = ({ deck }) => {
+const Study = ({ id }) => {
   const [activeCardFlipped, setActiveCardFlipped] = useState(false);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const activeCardIndexRef = useRef(activeCardIndex);
@@ -169,6 +189,14 @@ const Study = ({ deck }) => {
     }
   };
 
+  const { data, loading } = useQuery(DECK_QUERY, { variables: { id } });
+
+  if (loading) {
+    return <AppLoading />;
+  }
+
+  const { deck } = data;
+
   return (
     <Container>
       <Header breadcrumb={<StudyBreadcrumb deck={deck} />} extra={<StudyHelp />} />
@@ -201,17 +229,7 @@ const Study = ({ deck }) => {
 };
 
 Study.propTypes = {
-  deck: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    cards: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        front: PropTypes.string.isRequired,
-        back: PropTypes.string.isRequired,
-      })
-    ),
-  }).isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default Study;
