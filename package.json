@@ -75,7 +75,8 @@
       "document": "readonly",
       "window": "readonly",
       "setInterval": "readonly",
-      "setTimeout": "readonly"
+      "setTimeout": "readonly",
+      "confirm": "readonly"
     },
     "settings": {
       "react": {

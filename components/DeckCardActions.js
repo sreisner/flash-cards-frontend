@@ -52,7 +52,9 @@ const DeckCardActions = ({ id }) => {
 
   const handleDeleteDeck = async () => {
     try {
-      await deleteDeck();
+      if (confirm('Are you sure you want to delete this deck?')) {
+        await deleteDeck();
+      }
     } catch (error) {
       showNotification({
         variables: {
