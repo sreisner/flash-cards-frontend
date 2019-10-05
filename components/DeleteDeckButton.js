@@ -20,7 +20,6 @@ const DeleteDeckButton = ({ id, className }) => {
   const [deleteDeck, { loading }] = useMutation(DELETE_DECK_MUTATION, {
     variables: { id },
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
-    awaitRefetchQueries: true,
   });
 
   return (
