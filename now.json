@@ -1,0 +1,15 @@
+{
+  "name": "simple-flash-cards",
+  "version": 2,
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@now/next"
+    }
+  ],
+  "build": {
+    "env": {
+      "NPM_RC": "@npmrc"
+    }
+  }
+}
