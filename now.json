@@ -7,6 +7,9 @@
       "use": "@now/next"
     }
   ],
+  "env": {
+    "YOGA_ENDPOINT": "@yoga-endpoint"
+  },
   "build": {
     "env": {
       "NPM_RC": "@npmrc"
