@@ -111,8 +111,15 @@ const Study = ({ id }) => {
   const [activeCardFlipped, setActiveCardFlipped] = useState(false);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const activeCardIndexRef = useRef(activeCardIndex);
-  activeCardIndexRef.current = activeCardIndex;
+  useEffect(() => {
+    activeCardIndexRef.current = activeCardIndex;
+  }, [activeCardIndex]);
   const [answers, setAnswers] = useState({});
+  const { data, loading } = useQuery(DECK_QUERY, { variables: { id } });
+  const deckRef = useRef(null);
+  useEffect(() => {
+    deckRef.current = deck;
+  }, [data]);
 
   const prevCard = () => {
     setActiveCardIndex(prev => (prev > 0 ? prev - 1 : prev));
@@ -120,12 +127,12 @@ const Study = ({ id }) => {
   };
 
   const nextCard = () => {
-    setActiveCardIndex(prev => (prev < deck.cards.length - 1 ? prev + 1 : prev));
+    setActiveCardIndex(prev => (prev < deckRef.current.cards.length - 1 ? prev + 1 : prev));
     setActiveCardFlipped(false);
   };
 
   const markActiveCardCorrect = () => {
-    const { cards } = deck;
+    const { cards } = deckRef.current;
     const activeCard = cards[activeCardIndexRef.current];
 
     setAnswers(answers => ({
@@ -137,7 +144,7 @@ const Study = ({ id }) => {
   };
 
   const markActiveCardIncorrect = () => {
-    const { cards } = deck;
+    const { cards } = deckRef.current;
     const activeCard = cards[activeCardIndexRef.current];
 
     setAnswers(answers => ({
@@ -188,8 +195,6 @@ const Study = ({ id }) => {
       nextCard();
     }
   };
-
-  const { data, loading } = useQuery(DECK_QUERY, { variables: { id } });
 
   if (loading) {
     return <AppLoading />;
