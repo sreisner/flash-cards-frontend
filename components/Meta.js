@@ -14,7 +14,7 @@ const Meta = () => (
       content="Create and study flash cards with this simple, free app!"
     ></meta>
     <link rel="shortcut icon" href="/static/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+    <link rel="preload" as="style" type="text/css" href="/static/nprogress.css" />
     <title>Simple Flash Cards</title>
   </Head>
 );
