@@ -59,7 +59,7 @@ const Home = () => {
           </Col>
           <Col md={6}>
             <Actions className="justify-content-center justify-content-md-end">
-              <Button variant="primary" onClick={toggleCreateDeckDialog}>
+              <Button variant="primary" onClick={toggleCreateDeckDialog} aria-label="Create a Deck">
                 <FontAwesomeIcon icon="plus" /> Create a Deck
               </Button>
             </Actions>

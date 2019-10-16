@@ -67,7 +67,7 @@ const DeckCardActions = ({ id }) => {
 
   return (
     <Dropdown className="text-right pr-2">
-      <Toggle split variant="link-secondary" className="toggle">
+      <Toggle split variant="link-secondary" className="toggle" aria-label="Open actions menu">
         <FontAwesomeIcon icon="ellipsis-v" />
       </Toggle>
 
