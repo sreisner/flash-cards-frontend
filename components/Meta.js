@@ -8,14 +8,14 @@ const Meta = () => (
       name="viewport"
       content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
     />
-    <meta charSet="utf-8" />
+    <link rel="manifest" href="/static/manifest.json" />
     <meta
       name="description"
       content="Create and study flash cards with this simple, free app!"
     ></meta>
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="preload" as="style" type="text/css" href="/static/nprogress.css" />
-    <title>Simple Flash Cards</title>
+    <title>Simple Flashcards</title>
   </Head>
 );
 
